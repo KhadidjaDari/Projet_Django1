@@ -1,3 +1,4 @@
+{% load widget_tweaks%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +7,15 @@
 </head>
 <body>
 
+
 <form enctype="multipart/form-data"  method="POST">
 {% csrf_token %}
-{{ form.as_p }}
+{% for f in form%}
+<div class="form-group">
+    {{f.label_tag}}
+    {% render_field f class="form-control"%}
+</div>
+{% endfor %}
 <button type="submit" class="save btn btn−default">Save</button>
 </form>
 
