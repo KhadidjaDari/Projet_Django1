@@ -20,6 +20,7 @@ from test_app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-	path("", include("devoir.url")),
+	#path("", include("devoir.url")),
+    path("", include("comptes.url")),
     #path('students/', views.index,name="students"),
 ]

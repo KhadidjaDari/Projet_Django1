@@ -15,8 +15,8 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
+AUTH_USER_MODEL = 'comptes.Compte'
+AUTHENTICATION_BACKENDS = 'django.contrib.auth.backends.ModelBackend'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'devoir',
     'test_app',
-    'widget_tweaks'
+    'widget_tweaks',
     'comptes'
    
 ]
@@ -137,3 +137,4 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

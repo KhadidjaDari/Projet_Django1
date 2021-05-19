@@ -19,7 +19,7 @@
                                 </h1> 
                             </div>
 
-                            <form method="post" action="">
+                            <form method="post" action="{% url 'reg' %}" enctype="multipart/form-data" >
                             
                                 {% csrf_token %}
 
@@ -28,9 +28,9 @@
                                     <label for="email">Nom d'utilisateur</label>
                                     <div class="input-group">
                                         <span class="input-group-text" id="basic-addon3"><span class="fas fa-user-shield"></span></span>
-                                      
+                                      {{form.username}}
                                     </div>  
-                                    <span class="text-error"></span>
+                                    <span class="text-error">{{form.errors.username}}</span>
                                 </div>
 
                                 <!-- Form -->
@@ -38,9 +38,9 @@
                                     <label for="email">E-mail</label>
                                     <div class="input-group">
                                         <span class="input-group-text" id="basic-addon3"><span class="fas fa-envelope"></span></span>
-                                        
+                                        {{form.email}}
                                     </div>  
-                                    <span class="text-error"></span>
+                                    <span class="text-error">{{form.errors.email}}</span>
                                 </div>
                                 <!-- End of Form -->
 
@@ -52,9 +52,9 @@
                                         <label for="password">Mot de passe</label>
                                         <div class="input-group">
                                             <span class="input-group-text" id="basic-addon4"><span class="fas fa-unlock-alt"></span></span>
-                                           
+                                           {{form.password1}}
                                         </div>  
-                                        <span class="text-error"></span>
+                                        <span class="text-error">{{form.errors.password1}}</span>
                                     </div>
                                     <!-- End of Form -->
 
@@ -63,9 +63,9 @@
                                         <label for="password">Conformité du mot de passe</label>
                                         <div class="input-group">
                                             <span class="input-group-text" id="basic-addon4"><span class="fas fa-unlock-alt"></span></span>
-                                           
+                                            {{form.password2}}
                                         </div>  
-                                        <span class="text-error"></span>
+                                        <span class="text-error">{{form.errors.password2}}</span>
                                     </div>
                                     <!-- End of Form -->                                    
                                     <div class="form-group mb-4">
