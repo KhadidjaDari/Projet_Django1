@@ -10,22 +10,13 @@
     <main>
         <section class="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
             <div class="container">
-                <div class="row justify-content-center form-bg-image"style=" background-image:url('/static/assets/img/illustrations/signin.svg')">
-                    <div class="col-12 d-flex align-items-center justify-content-center">
-                        <div class="mb-4 mb-lg-0 bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500">
-                            <div class="text-center text-md-center mb-4 mt-md-0">
+                <div class="row justify-content-center form-bg-image "style=" background-image:url('/static/assets/img/illustrations/signin.svg')">
+                    <div class="col-12 d-flex align-items-center justify-content-center ">
+                        <div class="mb-4 mb-lg-0 bg-white shadow-soft border rounded border-light p-8 p-lg-5 w-100 fmxw-450 bg-gradient-secondary">
+                            <div class="text-center text-md-center mb-4 mt-md-0 " >
                                 <h1 class="mb-0 h3">
-                                    <a target="_blank"
-                                       href="https://appseed.us/admin-dashboards/django-dashboard-volt">Django Volt</a> - Sign IN
-                                </h1>
-                                <br />
-                                <p>
-                                    {% if msg %}
-                                        {{ msg | safe }}
-                                    {% else %}
-                                        Add your credentials
-                                    {% endif %}                                     
-                                </p> 
+                                    <a target="_blank">S'inscrire</a>
+                                </h1> 
                             </div>
 
                             <form method="post" action="">
@@ -34,22 +25,22 @@
 
                                 <!-- Form -->
                                 <div class="form-group mb-4">
-                                    <label for="email">Username</label>
+                                    <label for="email">Nom d'utilisateur</label>
                                     <div class="input-group">
                                         <span class="input-group-text" id="basic-addon3"><span class="fas fa-user-shield"></span></span>
-                                        {{ form.username }}
+                                      
                                     </div>  
-                                    <span class="text-error">{{ form.username.errors }}</span>
+                                    <span class="text-error"></span>
                                 </div>
 
                                 <!-- Form -->
                                 <div class="form-group mb-4">
-                                    <label for="email">Your Email</label>
+                                    <label for="email">E-mail</label>
                                     <div class="input-group">
                                         <span class="input-group-text" id="basic-addon3"><span class="fas fa-envelope"></span></span>
-                                        {{ form.email }}
+                                        
                                     </div>  
-                                    <span class="text-error">{{ form.email.errors }}</span>
+                                    <span class="text-error"></span>
                                 </div>
                                 <!-- End of Form -->
 
@@ -58,48 +49,43 @@
 
                                     <!-- Form -->
                                     <div class="form-group mb-4">
-                                        <label for="password">Your Password</label>
+                                        <label for="password">Mot de passe</label>
                                         <div class="input-group">
                                             <span class="input-group-text" id="basic-addon4"><span class="fas fa-unlock-alt"></span></span>
-                                            {{ form.password1 }}
+                                           
                                         </div>  
-                                        <span class="text-error">{{ form.password1.errors }}</span>
+                                        <span class="text-error"></span>
                                     </div>
                                     <!-- End of Form -->
 
                                     <!-- Form -->
                                     <div class="form-group mb-4">
-                                        <label for="password">Password Check</label>
+                                        <label for="password">Conformité du mot de passe</label>
                                         <div class="input-group">
                                             <span class="input-group-text" id="basic-addon4"><span class="fas fa-unlock-alt"></span></span>
-                                            {{ form.password2 }}
+                                           
                                         </div>  
-                                        <span class="text-error">{{ form.password2.errors }}</span>
+                                        <span class="text-error"></span>
                                     </div>
                                     <!-- End of Form -->                                    
-
+                                    <div class="form-group mb-4">
                                     <div class="d-flex justify-content-between align-items-top mb-4">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="remember">
-                                            <label class="form-check-label mb-0" for="remember">
-                                              Agree Terms
-                                            </label>
+                                          
                                         </div>
                                         <div class="form-check">
-                                            <a href="" class="small text-right">Login</a>
+                                            
                                         </div>
+                                        
                                     </div>                                  
-                                </div>
+                                </div></div>
                                 <div class="d-grid">
-                                    <button type="submit" name="register" class="btn btn-dark">Sign UP</button>
+                                    <button type="submit" name="register" class="btn btn-dark">S'inscrire</button>
                                 </div>
                             </form>
 
                             <div class="d-flex justify-content-center align-items-center mt-4">
-                                <span class="font-weight-normal">
-                                    &copy; <a  href="https://themesberg.com" target="_blank">Themesberg</a> 
-                                    - coded by <a target="_blank" href="https://appseed.us">AppSeed</a>
-                                </span>
+                              <p>Avez-vous un compte? Connectez-vous ici <a href="" class="small text-right">Connexion <span class="fas fa-user-shield"></span></a></p> 
                             </div>
 
                         </div>

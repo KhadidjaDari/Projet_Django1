@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'devoir',
     'test_app',
     'widget_tweaks'
+    'comptes'
    
 ]
 
