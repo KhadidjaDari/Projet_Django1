@@ -1,6 +1,7 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from .models import Compte
+from django.contrib.auth import get_user_model
 
 
 class RegistrationForm(UserCreationForm):
@@ -19,7 +20,7 @@ class RegistrationForm(UserCreationForm):
 
     '''added attributes so as to customise for styling, like bootstrap'''
     class Meta:
-        model = Compte
+        model = get_user_model()
         fields = ['email','password1','password2']
         field_order = ['email','password1','password2']
 
@@ -39,7 +40,7 @@ class RegistrationForm(UserCreationForm):
 
 #The save(commit=False) tells Django to save the new record, but dont commit it to the database yet
 
-class AuthenticationForm(forms.Form): # Note: forms.Form NOT forms.ModelForm
+class FormAuthentication(AuthenticationForm): # Note: forms.Form NOT forms.ModelForm
     email = forms.EmailField(widget=forms.TextInput(
         attrs={'class': 'form-control','type':'text','name': 'email','placeholder':'Email'}), 
         label='Email')

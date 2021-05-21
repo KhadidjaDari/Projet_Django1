@@ -15,11 +15,11 @@
                         <div class="mb-4 mb-lg-0 bg-white shadow-soft border rounded border-light p-8 p-lg-5 w-100 fmxw-450 bg-gradient-secondary">
                             <div class="text-center text-md-center mb-4 mt-md-0 " >
                                 <h1 class="mb-0 h3">
-                                    <a target="_blank">S'inscrire</a>
+                                    <a target="_blank">S'inscrire {{u}}</a>
                                 </h1> 
                             </div>
 
-                            <form method="post" action="{% url 'reg' %}" enctype="multipart/form-data" >
+                            <form method="post" >
                             
                                 {% csrf_token %}
 
