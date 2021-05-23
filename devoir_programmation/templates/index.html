@@ -6,9 +6,9 @@
     <title>Title</title>
 </head>
 <body>
+<h1>{{user.email}}</h1>
 
-
-<form enctype="multipart/form-data"  method="POST">
+<form action="{% url 'logout' %}" method="POST">
 {% csrf_token %}
 {% for f in form%}
 <div class="form-group">
@@ -16,7 +16,7 @@
     {% render_field f class="form-control"%}
 </div>
 {% endfor %}
-<button type="submit" class="save btn btn−default">Save</button>
+<button type="submit" class="save btn btn−default">logout</button>
 </form>
 
 </body>
