@@ -13,7 +13,7 @@ def index(request):
 def login_comp(request):
     user = request.user
     if user.is_authenticated:
-        return redirect("index")
+        return render(request,'page-500.html')
     if request.method == 'POST':
         form = FormAuthentication(request.POST)
         email   = request.POST.get('email')
@@ -23,7 +23,7 @@ def login_comp(request):
             if user.is_active:
                 login(request,user)
                 messages.success(request, "Logged In")
-                return redirect('index') 
+                return render(request, 'dashboard.html',{})
             else:
                 messages.error("please Correct Below Errors")
     else:
@@ -31,6 +31,9 @@ def login_comp(request):
     return render(request,'accounts/login.html',{'form':form,})
 
 def register(request):
+    user = request.user
+    if user.is_authenticated:
+        return render(request,'page-500.html')
     if request.method == 'POST':
         form = RegistrationForm(data = request.POST)
         if form.is_valid():
@@ -40,7 +43,7 @@ def register(request):
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             u = authenticate(request,email=email,password=password)
             login(request,u)
-            return redirect('index')
+            return render(request, 'dashboard.html',{})
     else:
         form = RegistrationForm()
 

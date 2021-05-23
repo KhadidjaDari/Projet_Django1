@@ -9,9 +9,10 @@
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
         <div class="btn-toolbar dropdown">
+            {% if user.type_cmp == 1%}
             <button class="btn btn-dark btn-sm me-2 dropdown-toggle" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <span class="fas fa-plus me-2"></span>Ajouter Une nouvelle devoir
-            </button>
+            </button>{%endif%}
             <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog">
     <div class="modal-dialog">
@@ -75,8 +76,9 @@
             </div>
         </div>
         <div class="form-group">
+            {% if user.type_cmp == 1%}
           <button type="button" class="btn btn-dark btn-sm me-3" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modal-notification">À propos du fichier à uploader</button>
-         <!-- Modal Content -->
+         <!-- Modal Content -->{%endif%}
          <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
             <div class="modal-dialog modal-info modal-dialog-centered" role="document">
                 <div class="modal-content bg-gradient-secondary">
@@ -84,6 +86,7 @@
                         <p class="modal-title" id="modal-title-notification">il faut respecter cette conditions </p>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    
                     <div class="modal-body">
                         <div class="py-3 text-center">
                             <span class="modal-icon display-1-lg"><span class="far fa-question-circle"></span></span>
