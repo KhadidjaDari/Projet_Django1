@@ -1,19 +1,23 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager,PermissionsMixin
 from django.utils.translation import ugettext_lazy as _
-
+from devoir.models import Enseignants,Etudiant
 class CompteManager(BaseUserManager):
-    def create_user(self,email,username,password=None):
+    def create_user(self,email,username,password=None,type_cmp=None):
         if not email:
             raise ValueError("Email est obligatoir")
         if not username :
             raise ValueError("Nom d'utilisateur  est obligatoir")
         
-        user = self.model( email=email,username=username)
+        user = self.model( email=email,username=username,type_cmp=type_cmp)
         user.set_password(password)
         user.is_superuser = False
         user.save(using=self._db)
-        return user
+        etudiant=None
+        if user.type_cmp == 0:
+            etudiant=Etudiant.objects.create(user=user.id)
+            etudiant.save()
+        return user,etudiant
     def create_superuser(self,email,username,password=None,type_cmp=None):
         if not email:
             raise ValueError("Email est obligatoir")
