@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import FormAuthentication, RegistrationForm
 from .models import Compte
+from devoir.models import Etudiant
 def index(request):
     return render(request,'index.html')
 
@@ -39,7 +40,14 @@ def register(request):
         if form.is_valid():
             email=request.POST['email']
             password=request.POST['password1']
+            type_cmp=request.POST['type_cmp']
+          
             user = form.save()
+            comp=Compte.objects.get(id=user.pk)
+            if type_cmp == '0':
+                etudiant=Etudiant.objects.create(user=comp)
+                etudiant.save()
+                
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             u = authenticate(request,email=email,password=password)
             login(request,u)

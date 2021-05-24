@@ -13,11 +13,8 @@ class CompteManager(BaseUserManager):
         user.set_password(password)
         user.is_superuser = False
         user.save(using=self._db)
-        etudiant=None
-        if user.type_cmp == 0:
-            etudiant=Etudiant.objects.create(user=user.id)
-            etudiant.save()
-        return user,etudiant
+        
+        return user
     def create_superuser(self,email,username,password=None,type_cmp=None):
         if not email:
             raise ValueError("Email est obligatoir")
