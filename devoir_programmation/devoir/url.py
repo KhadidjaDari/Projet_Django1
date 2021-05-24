@@ -13,6 +13,7 @@ urlpatterns = [
     path('reg',v.register,name='reg'),
     path('log',v.login_comp,name='login'),
     path('logout',v.logout_cmp,name='logout'),
+   
     #path('dashboard/', views.dashboard, name='dashboard'),
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),

@@ -11,6 +11,7 @@ from devoir.models import Etudiant
 def index(request):
     return render(request,'index.html')
 
+
 def login_comp(request):
     user = request.user
     if user.is_authenticated:

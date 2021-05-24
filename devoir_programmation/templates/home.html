@@ -22,7 +22,7 @@
 
 <!-- Primary Meta Tags -->
 <title>
-    Home  
+    Accueil
 </title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -88,12 +88,20 @@
                         </div>
                     </div>
                     <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+                        {%if user.is_authenticated%}
                         <li class="nav-item me-2">
                             <a href="/dashboard.html" class="btn btn-secondary text-dark btn-sm me-2">Tableau de bord</a>
                         </li>
                         <li class="nav-item me-2">
-                            <a href="" class="btn btn-secondary text-dark btn-sm me-2">Se déconnecter</a>
+                            <a href="{%url 'logout'%}" class="btn btn-secondary text-dark btn-sm me-2">Se déconnecter</a>
+                        </li>{%endif%}
+                        {%if not user.is_authenticated%}
+                        <li class="nav-item me-2">
+                            <a href="{%url 'login'%}" class="btn btn-secondary text-dark btn-sm me-2">Se connecter</a>
                         </li>
+                        <li class="nav-item me-2">
+                            <a href="{%url 'reg'%}" class="btn btn-secondary text-dark btn-sm me-2">S'inscrire</a>
+                        </li>{%endif%}
                     </ul>
                 </div>
                 <div class="d-flex align-items-center ms-auto">
@@ -121,12 +129,14 @@
                                 <img  src="/static/assets/img/logoo.png" alt="Dashboard page preview" height="300" width="300">
                             </div>
                         <div class="d-flex justify-content-center flex-column mb-6 mb-lg-5">
-                            <a href="https://themesberg.com" target="_blank">
-                                <span class="text-muted font-small">
-                                &copy; Tlemcen   
-                                </span>
+                            
+                                <img  src="/static/assets/img/flags/univ.png" alt="Dashboard page preview" height="50" width="50">
+                                <br>
+                                <a target="_blank" href="https://www.univ-tlemcen.dz">
+                                     Tlemcen   
+                                
                             </a>
-                            <a target="_blank" href="https://appseed.us">département informatique</a>
+                            <a target="_blank" href="https://fs.univ-tlemcen.dz/pages/33/d-partement-d-informatique">département informatique</a>
                         </div>
                     </div>
                 </div>
