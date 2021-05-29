@@ -1,8 +1,9 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,UserChangeForm
 from .models import Compte
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
+
 
 class RegistrationForm(UserCreationForm):
     username=forms.CharField(widget=forms.TextInput(
@@ -17,7 +18,7 @@ class RegistrationForm(UserCreationForm):
     password2 = forms.CharField(widget=forms.PasswordInput(
         attrs={'class':'form-control','type':'password', 'name': 'password2'}),
         label="Password (again)")
-    type_cmp= forms.IntegerField(widget=forms.HiddenInput())
+    type_cmp= forms.CharField(widget=forms.HiddenInput())
 
     '''added attributes so as to customise for styling, like bootstrap'''
     class Meta:
@@ -40,7 +41,10 @@ class RegistrationForm(UserCreationForm):
         return user
 
 #The save(commit=False) tells Django to save the new record, but dont commit it to the database yet
-
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = Compte
+        fields = ('email','username','type_cmp',)
 class FormAuthentication(forms.Form): # Note: forms.Form NOT forms.ModelForm
     """email = forms.EmailField(widget=forms.TextInput(
         attrs={'class': 'form-control','type':'text','name': 'email','placeholder':'Email'}), 
@@ -68,7 +72,6 @@ class FormAuthentication(forms.Form): # Note: forms.Form NOT forms.ModelForm
 
     def clean(self):
         if self.is_valid():
-
             email = self.cleaned_data.get('email')
             password = self.cleaned_data.get('password')
             if not authenticate(email=email, password=password):
