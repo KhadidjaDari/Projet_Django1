@@ -9,7 +9,7 @@
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
         <div class="btn-toolbar dropdown">
-            {% if user.type_cmp == 1%}
+            {% if user.type_cmp == 'Enseignant'%}
             <button class="btn btn-dark btn-sm me-2 dropdown-toggle" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <span class="fas fa-plus me-2"></span>Ajouter Une nouvelle devoir
             </button>{%endif%}
@@ -76,7 +76,7 @@
             </div>
         </div>
         <div class="form-group">
-            {% if user.type_cmp == 1%}
+            {% if user.type_cmp == 'Enseignant'%}
           <button type="button" class="btn btn-dark btn-sm me-3" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modal-notification">À propos du fichier à uploader</button>
          <!-- Modal Content -->{%endif%}
          <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">

@@ -25,8 +25,14 @@ def login_comp(request):
             if user.is_active:
                 if user.type_cmp == 'Enseignant':
                     comp=Compte.objects.get(id=user.pk)
-                    Enseignant=Enseignants(user=comp)
-                    Enseignant.save()
+                    e=None
+                    try:
+                        e=Enseignants.objects.get(user=comp)
+                    except:
+                        print("enseignant ne existe pas")
+                    if e == None:
+                     Enseignant=Enseignants(user=comp)
+                     Enseignant.save()
                 login(request,user)
                 messages.success(request, "Logged In")
                 return render(request, 'dashboard.html',{})

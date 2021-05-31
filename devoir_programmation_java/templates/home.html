@@ -89,9 +89,10 @@
                     </div>
                     <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
                         {%if user.is_authenticated%}
+                        {% if user.type_cmp == 'Enseignant' or user.type_cmp == 'Etdiant'%}
                         <li class="nav-item me-2">
                             <a href="/dashboard.html" class="btn btn-secondary text-dark btn-sm me-2">Tableau de bord</a>
-                        </li>
+                        </li>{%endif%}
                         <li class="nav-item me-2">
                             <a href="{%url 'logout'%}" class="btn btn-secondary text-dark btn-sm me-2">Se déconnecter</a>
                         </li>{%endif%}
@@ -166,54 +167,48 @@
                 </div>
                 <div class="row mb-5">
                     <div class="col-6 mb-5">
-                        <a href="/dashboard.html" class="page-preview scale-up-2">
-                            <img class="shadow-lg rounded scale" src="/static/assets/img/pages/overview.jpg" alt="Dashboard page preview">
+                        <a href="" class="page-preview scale-up-2">
+                            <img class="shadow-lg rounded scale" src="/static/assets/img/pages/gg.jpg" alt="Dashboard page preview">
                             <div class="text-center show-on-hover rounded-bottom">
-                                <h6 class="m-0 text-center text-white">Aperçu <i class="fas fa-external-link-alt ms-2"></i></h6>
                             </div>
                         </a>
                     </div>
                     <div class="col-6 mb-5">
-                        <a href="/transactions.html" class="page-preview scale-up-2">
-                            <img class="shadow-lg rounded scale" src="/static/assets/img/pages/transactions.jpg" alt="Transactions page preview">
+                        <a href="" class="page-preview scale-up-2">
+                            <img class="shadow-lg rounded scale" src="/static/assets/img/pages/kk.jpg" alt="Transactions page preview">
                             <div class="text-center show-on-hover rounded-bottom">
-                                <h6 class="m-0 text-center text-white">Transactions <i class="fas fa-external-link-alt ms-2"></i></h6>
                             </div>
                         </a>
                     </div>
                     <div class="col-6 mb-5">
-                        <a href="/settings.html" class="page-preview scale-up-2">
-                            <img class="shadow-lg rounded scale" src="/static/assets/img/pages/settings.jpg" alt="Settings page preview">
+                        <a href="" class="page-preview scale-up-2">
+                            <img class="shadow-lg rounded scale" src="/static/assets/img/pages/pp.jpg" alt="Settings page preview">
                             <div class="text-center show-on-hover rounded-bottom">
-                                <h6 class="m-0 text-center text-white">Paramètres <i class="fas fa-external-link-alt ms-2"></i></h6>
                             </div>
                         </a>
                     </div>
                     <div class="col-6 mb-5">
-                        <a href="/sign-in.html" class="page-preview scale-up-2">
-                            <img class="shadow-lg rounded scale" src="/static/assets/img/pages/sign-in.jpg" alt="Sign In page preview">
+                        <a href="" class="page-preview scale-up-2">
+                            <img class="shadow-lg rounded scale" src="/static/assets/img/pages/dd.jpg" alt="Sign In page preview">
                             <div class="text-center show-on-hover rounded-bottom">
-                                <h6 class="m-0 text-center text-white">S'authentifier <i class="fas fa-external-link-alt ms-2"></i></h6>
                             </div>
                         </a>
                     </div>
                     <div class="col-6 mb-5">
-                        <a href="/sign-up.html" class="page-preview scale-up-2">
-                            <img class="shadow-lg rounded scale" src="/static/assets/img/pages/sign-up.jpg" alt="Sign Up page preview">
+                        <a href="" class="page-preview scale-up-2">
+                            <img class="shadow-lg rounded scale" src="/static/assets/img/pages/hh.jpg" alt="Sign Up page preview">
                             <div class="text-center show-on-hover rounded-bottom">
-                                <h6 class="m-0 text-center text-white">S'inscrire <i class="fas fa-external-link-alt ms-2"></i></h6>
                             </div>
                         </a>
                     </div>
                     <div class="col-6 mb-5">
-                        <a href="/lock.html" class="page-preview scale-up-2">
-                            <img class="shadow-lg rounded scale" src="/static/assets/img/pages/lock.jpg" alt="Lock page preview">
+                        <a href="" class="page-preview scale-up-2">
+                            <img class="shadow-lg rounded scale" src="/static/assets/img/pages/yy.jpg" alt="Lock page preview">
                             <div class="text-center show-on-hover rounded-bottom">
-                                <h6 class="m-0 text-center text-white">S'inscrire <i class="fas fa-external-link-alt ms-2"></i></h6>
                             </div>
                         </a>
                     </div>
-                    <div class="col-6 mb-5">
+                    <!--<div class="col-6 mb-5">
                         <a href="/forgot-password.html" class="page-preview scale-up-2">
                             <img class="shadow-lg rounded scale" src="/static/assets/img/pages/forgot-password.jpg" alt="Forgot password preview">
                             <div class="text-center show-on-hover rounded-bottom">
@@ -246,7 +241,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </section>
         <section class="section section-lg bg-dark text-white">
             <div class="container">
