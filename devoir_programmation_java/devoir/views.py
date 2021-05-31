@@ -2,10 +2,29 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django import template
 from django.template import loader
+from .forms import Ajouterdevoir
+from .models import Enseignants
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 def index(request):
  return render(request,'home.html')
+def AjouterDevoir(request):
+    print("0000000000")
+    user = request.user
+    print("0000000000")
+    if user.is_authenticated:
+        print("0000000000")
+        if request.method == 'POST':
+            print("0000000000")
+            form = Ajouterdevoir(data = request.POST)
+            print("0000000000")
+            if form.is_valid():
+                form.save()
+                return render(request, 'dashboard.html',{})
+            else:
+                form = Ajouterdevoir()
+                e=Enseignants.objects.get(user=user)
+        return render(request,'dashboard.html',{'form':form,'e':e})
 
 @login_required()
 def pages(request):

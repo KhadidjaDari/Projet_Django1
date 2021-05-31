@@ -26,10 +26,13 @@
         </div>
         <div class="modal-body form-group">
             <div class="form-group">
+              <form method="post" >
+                            
+                {% csrf_token %}
+                <div class="form-group mb-4">
             <label for="disabledTextInput">Titre de devoir</label>
-            <input type="text" id="titre_devoir" class="form-control" placeholder="Titre de devoir">
-             
-       
+              {{form.titre}}             
+              {{e}}</div>
         </div>
         <div class="form-group">
             <label for="TextInput">Fichier de devoir</label>
@@ -62,7 +65,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-          <button type="button" class="btn btn-primary">Sauvegarder</button>
+          <button type="submit" class="btn btn-primary">Sauvegarder</button>
+        </form>
         </div>
       </div>
     </div>
