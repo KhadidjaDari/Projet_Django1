@@ -12,7 +12,7 @@
             {% if user.type_cmp == 'Enseignant'%}
             <button class="btn btn-dark btn-sm me-2 dropdown-toggle" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <span class="fas fa-plus me-2"></span>Ajouter Une nouvelle devoir
-            </button>{%endif%}
+            </button>
             <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog">
     <div class="modal-dialog">
@@ -76,158 +76,39 @@
             </div>
         </div>
         <div class="form-group">
-            {% if user.type_cmp == 'Enseignant'%}
-          <button type="button" class="btn btn-dark btn-sm me-3" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modal-notification">À propos du fichier à uploader</button>
-         <!-- Modal Content -->{%endif%}
-         <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
-            <div class="modal-dialog modal-info modal-dialog-centered" role="document">
-                <div class="modal-content bg-gradient-secondary">
-                    <div class="modal-header">
-                        <p class="modal-title" id="modal-title-notification">il faut respecter cette conditions </p>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    
-                    <div class="modal-body">
-                        <div class="py-3 text-center">
-                            <span class="modal-icon display-1-lg"><span class="far fa-question-circle"></span></span>
-                            <h2 class="h4 modal-title my-3">À propos du fichier à uploader de devoir!</h2>
-                            <p>l'extension de fichier à uploader soit .zip ou bien .rar et contient un fichier pdf contient les enonces de devoir et deux fichiers .txt
-                                le 1er in.txt comme entre de programme et 2eme out.txt pour la sortie de programme  
-                            </p>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-block btn-dark mb-3" data-bs-dismiss="modal">Ok</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+     
         <!-- End of Modal Content -->      
         </div>
     </div>
     <div class="row justify-content-md-center">
         <div class="col-12 mb-4">
-            <div class="card bg-secondary-alt shadow-sm">
+            <div class="modal-content bg-gradient-secondary">
                 <div class="card-header d-sm-flex flex-row align-items-center flex-0">
                     <div class="d-block mb-3 mb-sm-0">
-                        <div class="h5 fw-normal mb-2">Les informations:</div>
-                        <h2 class="h3">etudiant</h2>
-                        <div class="small mt-2"> 
-                           khadidja dari
+                        <div class="h5 modal-title my-3">Les informations sur devoir:</div>
+                        <div class="modal-header">
+                            <p class="modal-title" id="modal-title-notification">il faut respecter cette conditions </p>
+                        </div>
+                        
+                        <div class="modal-body">
+                            <div class="py-3 text-center">
+                                <span class="modal-icon display-1-lg"><span class="far fa-question-circle"></span></span>
+                                <h2 class="h4 modal-title my-3">À propos du fichier à uploader de devoir!</h2>
+                                <p>l'extension de fichier à uploader soit .zip ou bien .rar et contient un fichier pdf contient les enonces de devoir et deux fichiers .txt
+                                    le 1er in.txt comme entre de programme et 2eme out.txt pour la sortie de programme  
+                                </p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
                         </div>
                     </div>
-                    <div class="d-flex ms-auto">
-                        <a href="#" class="btn btn-secondary text-dark btn-sm me-2">Modifier</a>
-                        <a href="#" class="btn btn-dark btn-sm me-3">supprimer</a>
                     </div>
+                    
                 </div>
-                <div class="card-body p-2">
-                    <div class="ct-chart-sales-value ct-double-octave ct-series-g"></div>
-                </div>
+                
             </div>
         </div>
-        <div class="row">
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class=" shadow-lg rounded scale page-preview scale-up-2"  >
-                    <div class="px-3 px-lg-4 py-5 text-center">
-                        
-                        <span class="icon icon-lg mb-4"> <img  src="/static/assets/img/logoo.png"></span>
-                        <h5 class="fw-bold text-primary">Accueil</h5>
-                        <p>blablablablablablabla</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class=" shadow-lg rounded scale page-preview scale-up-2">
-                    <div class="px-3 px-lg-4 py-5 text-center">
-                        <span class="icon icon-lg mb-4"><span class="fa fa-fw fa-home"></span></span>
-                        <h5 class="fw-bold text-primary">Accueil</h5>
-                        <p>blablablablablablabla</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class=" shadow-lg rounded scale page-preview scale-up-2">
-                    <div class="px-3 px-lg-4 py-5 text-center">
-                        <span class="icon icon-lg mb-4"><span class="fa fa-fw fa-home"></span></span>
-                        <h5 class="fw-bold text-primary">Accueil</h5>
-                        <p>blablablablablablabla</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class=" shadow-lg rounded scale page-preview scale-up-2">
-                    <div class="px-3 px-lg-4 py-5 text-center">
-                        <span class="icon icon-lg mb-4"><span class="fa fa-fw fa-home"></span></span>
-                        <h5 class="fw-bold text-primary">Accueil</h5>
-                        <p>blablablablablablabla</p>
-                    </div>
-                </div>
-            </div>
-        
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class=" shadow-lg rounded scale page-preview scale-up-2">
-                    <div class="px-3 px-lg-4 py-5 text-center">
-                        <span class="icon icon-lg mb-4"><span class="fa fa-fw fa-home"></span></span>
-                        <h5 class="fw-bold text-primary">Accueil</h5>
-                        <p>blablablablablablabla</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class=" shadow-lg rounded scale page-preview scale-up-2">
-                    <div class="px-3 px-lg-4 py-5 text-center">
-                        <span class="icon icon-lg mb-4"><span class="fa fa-fw fa-home"></span></span>
-                        <h5 class="fw-bold text-primary">Accueil</h5>
-                        <p>blablablablablablabla</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class=" shadow-lg rounded scale page-preview scale-up-2">
-                    <div class="px-3 px-lg-4 py-5 text-center">
-                        <span class="icon icon-lg mb-4"><span class="fa fa-fw fa-home"></span></span>
-                        <h5 class="fw-bold text-primary">Accueil</h5>
-                        <p>blablablablablablabla</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class=" shadow-lg rounded scale page-preview scale-up-2">
-                    <div class="px-3 px-lg-4 py-5 text-center">
-                        <span class="icon icon-lg mb-4"><span class="fa fa-fw fa-home"></span></span>
-                        <h5 class="fw-bold text-primary">Accueil</h5>
-                        <p>blablablablablablabla</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class=" shadow-lg rounded scale page-preview scale-up-2">
-                    <div class="px-3 px-lg-4 py-5 text-center">
-                        <span class="icon icon-lg mb-4"><span class="fa fa-fw fa-home"></span></span>
-                        <h5 class="fw-bold text-primary">Accueil</h5>
-                        <p>blablablablablablabla</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class=" shadow-lg rounded scale page-preview scale-up-2">
-                    <div class="px-3 px-lg-4 py-5 text-center">
-                        <span class="icon icon-lg mb-4"><span class="fa fa-fw fa-home"></span></span>
-                        <h5 class="fw-bold text-primary">Accueil</h5>
-                        <p>blablablablablablabla</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class=" shadow-lg rounded scale page-preview scale-up-2">
-                    <div class="px-3 px-lg-4 py-5 text-center">
-                        <span class="icon icon-lg mb-4"><span class="fa fa-fw fa-home"></span></span>
-                        <h5 class="fw-bold text-primary">Accueil</h5>
-                        <p>blablablablablablabla</p>
-                    </div>
-                </div>
-            </div>
+        {%endif%}
 
 {% endblock content %}
 
