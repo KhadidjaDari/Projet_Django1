@@ -26,38 +26,44 @@
         </div>
         <div class="modal-body form-group">
             <div class="form-group">
-              <form method="post" >
+              <form method="post" action="{%url 'ajouter_devoir'%}" enctype="multipart/form-data">
                             
                 {% csrf_token %}
                 <div class="form-group mb-4">
             <label for="disabledTextInput">Titre de devoir</label>
-              {{form.titre}}             
-              </div>
+              <input type="text" class="form-control" name="titre">
+            </div>
         </div>
         <div class="form-group">
             <label for="TextInput">Fichier de devoir</label>
             <span class='fas fa-file-import fa-1x'></span>
-            {{form.fichier}}
+            <input type="file"  class="form-control" name="fichier"> 
               
         </div>
             <div class="form-group">
                 <label for="exampleFormControlSelect1">Type de devoir</label>
-                {{form.type_dev}}
+                <select class="form-control"  name="type_dev">
+                  <option>sommative</option>
+                  <option>formative</option>
+                </select>
               </div>
-              
               <div class="form-group">
                 <label for="TextInput">Date de soumission</label>
-                {{form.date_fin}}
+                <input type="date"  class="form-control" name="date_fin">
               </div>
               <div class="form-group">
                 <label for="exampleFormControlSelect1">Catégorie</label>
-                {{form.module.nom}}
+                <select class="form-control" name="module">
+                  {% for i in c%}
+                  <option>{{i.nom}}</option>
+                  {%endfor%}
+                </select>
               </div>
         </div>
         <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
           <button type="submit" class="btn btn-primary">Sauvegarder</button>
         </form>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
         </div>
       </div>
     </div>
@@ -106,7 +112,6 @@
                 
             </div>
         </div>
-        
         {%endif%}
 
 {% endblock content %}

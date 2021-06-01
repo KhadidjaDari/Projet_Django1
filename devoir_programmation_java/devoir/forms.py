@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from .models import *
-class Ajouterdevoir(forms.ModelForm):
+class Ajouterdevoir(ModelForm):
     id_ens=forms.ModelChoiceField(queryset=Enseignants.objects.only('pk'),widget=forms.HiddenInput())
     module=forms.ModelChoiceField(queryset=Categorie.objects.only('nom'))
     class Meta:

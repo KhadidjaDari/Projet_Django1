@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import FormAuthentication, RegistrationForm
 from .models import Compte
-from devoir.models import Etudiant,Enseignants
+from devoir.models import Etudiant,Enseignants,Categorie
 def index(request):
     return render(request,'index.html')
 
@@ -21,6 +21,7 @@ def login_comp(request):
         email   = request.POST.get('email')
         password = request.POST.get('password')
         user = authenticate(request,email=email, password=password)
+        c=Categorie.objects.all()  
         if user is not None:
             if user.is_active:
                 if user.type_cmp == 'Enseignant':
@@ -35,15 +36,16 @@ def login_comp(request):
                      Enseignant.save()
                 login(request,user)
                 messages.success(request, "Logged In")
-                return render(request, 'dashboard.html',{})
+                return render(request, 'dashboard.html',{'c':c})
             else:
                 messages.error("please Correct Below Errors")
     else:
         form = FormAuthentication()
-    return render(request,'accounts/login.html',{'form':form,})
+    return render(request,'accounts/login.html',{'form':form})
 
 def register(request):
     user = request.user
+    c=Categorie.objects.all()  
     if user.is_authenticated:
         return render(request,'page-500.html')
     if request.method == 'POST':
@@ -62,7 +64,7 @@ def register(request):
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             u = authenticate(request,email=email,password=password)
             login(request,u)
-            return render(request, 'dashboard.html',{})
+            return render(request, 'dashboard.html',{'c':c})
     else:
         form = RegistrationForm()
 
