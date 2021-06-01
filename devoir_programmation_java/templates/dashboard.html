@@ -32,41 +32,32 @@
                 <div class="form-group mb-4">
             <label for="disabledTextInput">Titre de devoir</label>
               {{form.titre}}             
-              {{e}}</div>
+              </div>
         </div>
         <div class="form-group">
             <label for="TextInput">Fichier de devoir</label>
             <span class='fas fa-file-import fa-1x'></span>
-            <input type="file" id="fichier_devoir" class="form-control" > 
+            {{form.fichier}}
               
         </div>
             <div class="form-group">
                 <label for="exampleFormControlSelect1">Type de devoir</label>
-                <select class="form-control" id="type_devoir">
-                  <option>Sommative</option>
-                  <option>Formative</option>
-                </select>
+                {{form.type_dev}}
               </div>
-              <div class="form-group">
-                <label for="TextInput">Date de déposition</label>
-                <input type="date" id="date_depose" class="form-control">
-              </div>
+              
               <div class="form-group">
                 <label for="TextInput">Date de soumission</label>
-                <input type="date" id="date_soum" class="form-control">
+                {{form.date_fin}}
               </div>
               <div class="form-group">
                 <label for="exampleFormControlSelect1">Catégorie</label>
-                <select class="form-control" id="categorie">
-                  <option>Algorithmique</option>
-                  <option>POO</option>
-                </select>
+                {{form.module.nom}}
               </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
           <button type="submit" class="btn btn-primary">Sauvegarder</button>
         </form>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
         </div>
       </div>
     </div>
@@ -115,6 +106,7 @@
                 
             </div>
         </div>
+        
         {%endif%}
 
 {% endblock content %}

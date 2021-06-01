@@ -15,15 +15,18 @@ def AjouterDevoir(request):
     if user.is_authenticated:
         print("0000000000")
         if request.method == 'POST':
-            print("0000000000")
+            print("*******")
             form = Ajouterdevoir(data = request.POST)
-            print("0000000000")
+            print("***************")
             if form.is_valid():
                 form.save()
-                return render(request, 'dashboard.html',{})
-            else:
-                form = Ajouterdevoir()
-                e=Enseignants.objects.get(user=user)
+                return render(request,'dashboard.html',{})
+        else:
+            print("9999999999")
+            form = Ajouterdevoir()
+            print("9999999999")
+            e=Enseignants.objects.get(user=user)
+            print("9999999999")
         return render(request,'dashboard.html',{'form':form,'e':e})
 
 @login_required()

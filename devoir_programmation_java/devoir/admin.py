@@ -3,7 +3,9 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from devoir.models import Enseignants,Categorie,Etudiant
 from comptes.models import Compte
 from comptes.forms import RegistrationFormAdmin, UserChangeForm
-admin.site.register(Categorie)
+class CategorieAffiche(admin.ModelAdmin):
+    list_display = ('nom', 'promo')
+admin.site.register(Categorie,CategorieAffiche)
 
 class CompteAdmin(BaseUserAdmin):
     form = UserChangeForm
@@ -26,11 +28,13 @@ class CompteAdmin(BaseUserAdmin):
     ordering = ('email',)
     filter_horizontal = ()
 class NotAdd(admin.ModelAdmin):
+    list_display = ('nom','prenom' ,'promo')
     exclude=('user',)
     readonly_fields=('nom','prenom','avatar','date_naiss','promo')
     def has_add_permission(self, request):
         return False
 class NotAdd2(admin.ModelAdmin):
+    list_display = ('nom', 'prenom','grade')
     exclude=('user',)
     readonly_fields=('nom','prenom','avatar','date_naiss','grade')
     def has_add_permission(self, request):
