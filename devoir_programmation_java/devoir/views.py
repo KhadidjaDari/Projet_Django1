@@ -38,7 +38,7 @@ def AjouterDevoir(request):
                 devoir.save()
                 return render(request,'dashboard.html',{'c':c})
             else:
-                sweetify.warning(request,'Erreur', button='Fermer',text="Le fichier que vous avez téléchargé ne correspond pas au format .zip",timer=10000,icon='warning',footer='format de  fichier à uploader est .zip')
+                sweetify.sweetalert(request,'Erreur', button='Fermer',text="Le fichier que vous avez téléchargé ne correspond pas au format .zip",timer=10000,icon='warning',footer='format de  fichier à uploader est .zip')
                 return redirect('dashboard')
         return render(request,'dashboard.html',{'c':c})
 

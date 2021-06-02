@@ -42,8 +42,28 @@
         <div class="form-group">
             <label for="TextInput">Fichier de devoir</label>
             <span class='fas fa-file-import fa-1x'></span>
-            <input type="file"  class="form-control" name="fichier" id="fichier"> 
-        </div>
+            <input type="file"  class="form-control" name="fichier" id="fichier" onchange="return Validation()"> 
+            <script> 
+              function Validation() 
+              { 
+              var fichier = document.getElementById('fichier'); 
+              var valeur = fichier.value; 
+              var extensions = /(\.zip)$/i; 
+                if (!extensions.exec(valeur))
+                { 
+                  Swal.fire({
+                                position: 'center',
+                                icon: 'warning',
+                                title:'Erreur',
+                                text: "Le fichier que vous avez téléchargé ne correspond pas au format .zip",
+                                showConfirmButton: true,
+                                timer: 10000,
+                                confirmButtonText: 'Fermer',
+
+                            })
+                }}
+                </script>
+          </div>
             <div class="form-group">
                 <label for="exampleFormControlSelect1">Type de devoir</label>
                 <select class="form-control"  name="type_dev">
@@ -93,7 +113,7 @@
                 <div class="card-header d-sm-flex flex-row align-items-center flex-0">
                     <div class="d-block mb-3 mb-sm-0">
                         <div class="h3 modal-title my-3">
-                            <span class='fas fa-info  fa-3x'></span>
+                            <span class='fas fa-info  fa-3x '></span>
                             Les informations sur devoir:</div>
                         <div class="modal-header">
                             <p class="modal-title" id="modal-title-notification">il faut respecter cette conditions </p>
@@ -101,7 +121,7 @@
                         
                         <div class="modal-body">
                             <div class="py-3 text-center">
-                                <span class="modal-icon display-1-lg"><span class="far fa-question-circle"></span></span>
+                                <span class="modal-icon display-1-lg"><span class="far fa-question-circle fa-spin"></span></span>
                                 <h2 class="h4 modal-title my-3">À propos du fichier à uploader de devoir!</h2>
                                 <p>l'extension de fichier à uploader est .zip et contient un fichier pdf contient les enonces de devoir et deux fichiers .txt
                                     le 1er in.txt comme entre de programme et 2eme out.txt pour la sortie de programme  
