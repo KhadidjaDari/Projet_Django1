@@ -22,7 +22,7 @@ LOGIN_URL='login'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-x1ld^h=j3_@b=-b0$7v_y3x9iraey3m-293pamd3kk6r_mxxr('
-
+SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'comptes',
     'devoir',
     'widget_tweaks',
+    'sweetify',
 ]
 
 MIDDLEWARE = [

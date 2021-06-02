@@ -74,7 +74,7 @@
 
 <!-- Volt CSS -->
 <link type="text/css" href="/static/assets/css/volt.css" rel="stylesheet">
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 <body>
 
@@ -104,6 +104,7 @@
   </main>
 
   {% include 'includes/scripts.html' %}
-
+  {% load sweetify %}
+  {% sweetify %}
 </body>
 </html>

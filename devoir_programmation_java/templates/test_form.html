@@ -1,7 +1,23 @@
-<p>{{e}}</p>
-<h1>hello form</h1>
-<form method="POST" class="post-form">
-    {% csrf_token %}
-    {{from.titre}}
-
+{% load sweetify %} 
+{% sweetify %}
+<head>
+    <title>ss</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body>
+<form method="get" action="{%url 'ss'%}">
+    <button>show</button>
+    {% if user.is_authenticated %}
+    <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'error',
+            text: "{{user.username}}",
+            showConfirmButton: true,
+            timer: 5000
+        })
+    </script>
+    {%endif%}
 </form>
+
+</body>

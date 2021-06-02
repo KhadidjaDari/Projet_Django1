@@ -3,17 +3,25 @@ from django.http import HttpResponse
 from django import template
 from django.template import loader
 from .forms import Ajouterdevoir
+import zipfile as z
+import os
+import sweetify
 from .models import Enseignants,Devoirs,Categorie
 from django.contrib.auth.decorators import login_required
 # Create your views here.
+def swwet(request):
+    return render(request,'test_form.html')
 def index(request):
  return render(request,'home.html')
-def AjouterDevoir(request):
-    print("0000000000")
+def dashboard(request):
     user = request.user
-    print("0000000000")
+    c=Categorie.objects.all()  
+    return render(request,'dashboard.html',{'c':c})
+@login_required()
+def AjouterDevoir(request):
+    user = request.user
     if user.is_authenticated:
-        print("0000000000")
+        c=Categorie.objects.all() 
         if request.method == 'POST':
             titre=request.POST['titre']
             fichier=request.FILES['fichier']
@@ -22,12 +30,17 @@ def AjouterDevoir(request):
             #date_dep=request.POST['date_dep']
             date_fin=request.POST['date_fin']
             module=request.POST['module']
-            c=Categorie.objects.get(nom=module)
+            C=Categorie.objects.get(nom=module)
             e=Enseignants.objects.get(user=user)
-            devoir=Devoirs(titre=titre,fichier=fichier,type_dev=type_dev,date_fin=date_fin,module=c,id_ens=e)
-            devoir.save()
-            return render(request,'dashboard.html',{})
-        return render(request,'dashboard.html',{})
+            #print(z.is_zipfile(fichier))
+            if os.path.splitext(fichier.name)[1] != ".xlsx" and z.is_zipfile(fichier) and os.path.splitext(fichier.name)[1] != ".docx" :
+                devoir=Devoirs(titre=titre,fichier=fichier,type_dev=type_dev,date_fin=date_fin,module=C,id_ens=e)
+                devoir.save()
+                return render(request,'dashboard.html',{'c':c})
+            else:
+                sweetify.warning(request,'Erreur', button='Fermer',text="Le fichier que vous avez téléchargé ne correspond pas au format .zip",timer=10000,icon='warning',)
+                return redirect('dashboard')
+        return render(request,'dashboard.html',{'c':c})
 
 @login_required()
 def pages(request):

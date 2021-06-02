@@ -1,11 +1,15 @@
+
 {% extends "layouts/base.html" %}
 
 {% block title %} Tableau de bord {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+{% endblock stylesheets %}
 
 {% block content %}
+
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
         <div class="btn-toolbar dropdown">
@@ -34,11 +38,11 @@
               <input type="text" class="form-control" name="titre">
             </div>
         </div>
+        
         <div class="form-group">
             <label for="TextInput">Fichier de devoir</label>
             <span class='fas fa-file-import fa-1x'></span>
-            <input type="file"  class="form-control" name="fichier"> 
-              
+            <input type="file"  class="form-control" name="fichier" id="fichier"> 
         </div>
             <div class="form-group">
                 <label for="exampleFormControlSelect1">Type de devoir</label>
@@ -82,6 +86,7 @@
         <!-- End of Modal Content -->      
         </div>
     </div>
+            
     <div class="row justify-content-md-center">
         <div class="col-12 mb-4">
             <div class="modal-content bg-gradient-secondary">
@@ -112,8 +117,10 @@
                 
             </div>
         </div>
+      
+  
+        
         {%endif%}
-
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->

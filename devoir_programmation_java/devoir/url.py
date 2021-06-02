@@ -13,6 +13,8 @@ urlpatterns = [
     path('reg',v.register,name='reg'),
     path('log',v.login_comp,name='login'),
     path('logout',v.logout_cmp,name='logout'),
+    path('ss',views.swwet,name="ss"),
+    path('dashbord',views.dashboard,name="dashboard"),
     path('ajouter_devoir',views.AjouterDevoir,name='ajouter_devoir'),
     #path('dashboard/', views.dashboard, name='dashboard'),
     # Matches any html file
