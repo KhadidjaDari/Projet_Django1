@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Paramètres {% endblock %} 
+{% block title %} Profil {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -168,14 +168,13 @@
                   <div class="card shadow-sm text-center p-0">
                       <div class="profile-cover rounded-top" data-background="/static/assets/img/profile-cover.jpg"></div>
                       <div class="card-body pb-5">
-                          <img src="/static/assets/img/avatar.jpg" class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait">
+                          <img src="/media/avatars/{{e.avatar}}" class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait">
                           <h4 class="h3">
                             {{ request.user.username }}
                           </h4>
                           <h5 class="fw-normal">
                             {{ request.user.email }}
                           </h5>
-                          <p class="text-gray mb-4">Khadiddja Dari</p>
                           <a class="btn btn-sm btn-dark me-2" href="#"><span class="fas fa-user-plus me-1"></span>Ajouter</a>
                           <a class="btn btn-sm btn-secondary" href="#">Envoyer message</a>
                       </div>

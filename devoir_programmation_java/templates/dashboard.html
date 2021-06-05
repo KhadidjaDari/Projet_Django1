@@ -6,6 +6,7 @@
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock stylesheets %}
 
 {% block content %}
@@ -30,6 +31,8 @@
         </div>
         <div class="modal-body form-group">
             <div class="form-group">
+              {% load sweetify %}
+              {% sweetify %}
               <form method="post" action="{%url 'ajouter_devoir'%}" enctype="multipart/form-data">
                             
                 {% csrf_token %}
@@ -61,7 +64,22 @@
                                 confirmButtonText: 'Fermer',
 
                             })
-                }}
+                  
+                }
+                if(event.target.files[0].size>1024*1024){
+                  Swal.fire({
+                                position: 'center',
+                                icon:'error',
+                                title:'Erreur',
+                                text: "La taille du fichier est trop grande, la taille du fichier ne doit pas dépasser 1 Mo",
+                                showConfirmButton: true,
+                                timer: 10000,
+                                confirmButtonText: 'Fermer',
+
+                            })
+                            event.preventDefault()
+                }
+              }
                 </script>
           </div>
             <div class="form-group">
@@ -144,4 +162,6 @@
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock javascripts %}
