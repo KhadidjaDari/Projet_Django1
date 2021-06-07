@@ -34,10 +34,8 @@
         <li><br></li>
         <li class="nav-item">
           <a href="/" class="nav-link d-flex align-items-center">
-            <span class='fas fa-home  fa-1x'></span>
-            <span class="sidebar-icon"><span class="mt-1 ms-1 sidebar-text"></span></span>
-            <span class="sidebar-text"> Page d'Accueil </span>
-          </a>
+            <span class="sidebar-icon"><span class='fas fa-home  fa-1x'></span></span>
+            <span class="mt-1 ms-1 sidebar-text">Page d'Accueil </span></a>
         </li>
         <li class="nav-item">
           <a href="{%url 'dashboard'%}" class="nav-link d-flex align-items-center">
@@ -142,30 +140,9 @@
             data-bs-toggle="collapse" data-bs-target="#submenu-components">
             <span>
               <span class="sidebar-icon"><span class="fas fa-box-open  fa-1x"></span></span>
-              <span class="sidebar-text">Mes devoirs</span>
-            </span>
-            <span class="link-arrow"><span class="fas fa-chevron-right"></span></span>
-          </span>
-          <div class="multi-level collapse " role="list"
-            id="submenu-components" aria-expanded="false">
-            <ul class="flex-column nav">
-              <li class="nav-item ">
-                <a class="nav-link" href="">
-                  <span class="sidebar-text">d1</span>
-                </a>
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link" href="">
-                  <span class="sidebar-text">d2</span>
-                </a>
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link" href="">
-                  <span class="sidebar-text">d2</span>
-                </a>
-              </li>
-            </ul>
-          </div>
+            <a href="{% url 'ListDevoir'%}"> <span class="sidebar-text">Mes devoirs</span>
+            </span></a> 
+  
         </li>
         <li role="separator" class="dropdown-divider mt-4 mb-3 border-black"></li>
         

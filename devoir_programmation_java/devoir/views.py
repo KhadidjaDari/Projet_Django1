@@ -9,6 +9,7 @@ import os
 import sweetify
 from .models import Enseignants,Devoirs,Categorie,Etudiant
 from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 def swwet(request):
@@ -25,8 +26,13 @@ def index(request):
 
 def dashboard(request):
     user = request.user
-    c=Categorie.objects.all()  
-    return render(request,'dashboard.html',{'c':c})
+    c=Categorie.objects.all() 
+    e=None
+    if user.type_cmp == 'Etudiant':
+        e=Etudiant.objects.get(user=user)
+    if user.type_cmp == 'Enseignant':
+        e=Enseignants.objects.get(user=user) 
+    return render(request,'dashboard.html',{'c':c,'e':e})
 def VerfierCondition(f):
     try:
         lire=z.ZipFile(f,mode='r',)
@@ -129,8 +135,60 @@ def pages(request):
     
         html_template = loader.get_template( 'page-500.html' )
         return HttpResponse(html_template.render(context, request))
+@login_required()
+def ModifierInfo(request):
+    user = request.user
+    if request.method == 'POST':
+        nom=request.POST['nom']
+        prenom=request.POST['prenom']
+        date_naiss=request.POST['date_naiss']
+        e=None
+        if user.type_cmp == 'Etudiant':
+            promo=request.POST['promo']
+            e=Etudiant.objects.get(user=user)
+            e.nom=nom
+            e.prenom=prenom
+            e.date_naiss=date_naiss
+            e.promo=promo
+            e.save()
+            sweetify.sweetalert(request,'Modification les informations personnelle', button='ok',text="Modifie avec succès",timer=10000,icon='success',)
+            return redirect('Profil')
+        if user.type_cmp == 'Enseignant':
+            grade=request.POST['grade']
+            e=Enseignants.objects.get(user=user)
+            e.nom=nom
+            e.prenom=prenom
+            e.date_naiss=date_nais
+            e.grade=grade
+            e.save()
+            sweetify.sweetalert(request,'Modification les informations personnelle', button='ok',text="Modifie avec succès",timer=10000,icon='success',)
+            return redirect('Profil')
+    else:
+        return redirect('Profil')
 
 
+
+@login_required()  
+def ModifierAvatar(request):   
+    user = request.user
+    if request.method == 'POST':
+        img=request.FILES['avatar']
+        print(img)
+        if user.type_cmp == 'Etudiant':
+           e=Etudiant.objects.get(user=user)
+           e.avatar=img
+           e.save()
+           sweetify.sweetalert(request,'Modification image', button='ok',text="Modifie avec succès",timer=10000,icon='success',)
+
+           return redirect('Profil')
+        if user.type_cmp == 'Enseignant':
+            e=Enseignants.objects.get(user=user)
+            e.avatar=img
+            e.save()
+            sweetify.sweetalert(request,'Modification image', button='ok',text="Modifie avec succès",timer=10000,icon='success',)
+            return redirect('Profil')
+    else:
+        return redirect('Profil')
 @login_required()
 def Profil(request):
     user = request.user
@@ -140,3 +198,28 @@ def Profil(request):
     if user.type_cmp == 'Etudiant':
         e=Etudiant.objects.get(user=user)
     return render(request,'settings.html',{'e':e})
+
+
+
+
+@login_required()
+def ListDevoir(request):
+    user = request.user
+    if user.type_cmp == 'Etudiant':
+        e=Etudiant.objects.get(user=user)
+        list_devoirs=[]
+        if e.promo != None:
+            c=Categorie.objects.filter(promo=e.promo)
+            print(c)
+            for cat in c:
+                list_devoirs.append(Devoirs.objects.filter(module=cat).values())
+            print("*******************************",list_devoirs[0])
+            p=[format(d['id']) for d in list_devoirs[0]]
+            devoirs=[]
+            for i in p:
+                devoirs.append(Devoirs.objects.get(id=i))
+            return render(request,'tt.html',{'devoirs':devoirs})
+        else :
+            return render(request,'tt.html')
+    else:
+        return render(request,'tt.html')

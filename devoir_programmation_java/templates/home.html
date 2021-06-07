@@ -89,7 +89,7 @@
                     </div>
                     <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
                         {%if user.is_authenticated%}
-                        {% if user.type_cmp == 'Enseignant' or user.type_cmp == 'Etdiant'%}
+                        {% if user.type_cmp == 'Enseignant' or user.type_cmp == 'Etudiant'%}
                         <li class="nav-item me-2">
                             <a href="/dashboard.html" class="btn btn-secondary text-dark btn-sm me-2">Tableau de bord</a>
                         </li>{%endif%}

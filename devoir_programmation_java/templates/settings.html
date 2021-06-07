@@ -3,15 +3,88 @@
 {% block title %} Profil {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+{% endblock stylesheets %}
 
 {% block content %}
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
       <div>
-          <button class="btn btn-secondary text-dark me-2 dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <span class="fas fa-plus me-2"></span>Nouveau
+          <button class="btn btn-secondary text-dark me-2 dropdown-toggle" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <span class="fas fa-plus me-2"></span>modifier les  informations personnel
           </button>
+          <!-- debut-->
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modifier les  informations personnel</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body form-group">
+                    <div class="form-group">
+                  <form method="post" action="{%url 'ModifierInfo'%}">
+                    {% csrf_token %}
+                      <div class="row">
+                          <div class="col-md-6 mb-3">
+                          
+                                  <label for="first_name">Prénom</label>
+                                  <input class="form-control" name="prenom" type="text" placeholder={{e.prenom}} >
+                              </div>
+                          <div class="col-md-6 mb-3">
+                              
+                                  <label for="last_name">Nom</label>
+                                  <input class="form-control" name="nom" type="text" placeholder={{e.nom}} >
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row align-items-center">
+                          <div class="col-md-6 mb-3">
+                              <label for="birthday">Date d'anniversaire</label>
+                              <div class="input-group">
+                                  <span class="input-group-text"><span class="far fa-calendar-alt"></span></span>
+                                  <input type="date" class="form-control" name="date_naiss" type="text" placeholder={{e.date_naiss}} >                                               
+                                </div>
+                          </div>
+                          {%if user.type_cmp == 'Etudiant'%}
+                          <div class="col-md-6 mb-3">
+                              <label for="gender">Promotion</label>
+                              <select class="form-select mb-0" name="promo" aria-label="Genre select example">
+                                  <option selected>L2</option>
+                                  <option value="1">L3</option>
+                                  <option value="2">M1GL</option>
+                                  <option value="2">M2GL</option>
+                                  <option value="2">M1RSD</option>
+                                  <option value="2">M2RSD</option>
+                                  <option value="2">M1MID</option>
+                                  <option value="2">M2MID</option>
+                                  <option value="2">M1SIC</option>
+                                  <option value="2">M2SIC</option>
+                              </select>
+                          </div>
+                          {%endif%}
+                          {% if user.type_cmp == 'Enseignant'%}
+                          <div class="col-md-6 mb-3">
+                              <div class="form-group">
+                                  <label for="email">Grade</label>
+                                  <input class="form-control" name="grade" type="text" placeholder={{e.grade}} >
+                              </div>
+                          </div>
+                          {%endif%}
+                      </div>
+                      
+                     
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                      </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+                  <!--fin-->
+          
           <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-0">
               <a class="dropdown-item fw-normal rounded-top" href="#"><span class="far fa-file-alt me-2"></span>Document</a>
               <a class="dropdown-item fw-normal" href="#"><span class="far fa-comment-dots me-2"></span>Message</a>
@@ -39,19 +112,18 @@
   <div class="row">
       <div class="col-12 col-xl-8">
           <div class="card card-body shadow-sm mb-4">
-              <h2 class="h5 mb-4">Informations générales</h2>
-              <form>
+              <h2 class="h5 mb-4">Informations générales sur l'utilisateur</h2>
                   <div class="row">
                       <div class="col-md-6 mb-3">
                           <div>
                               <label for="first_name">Prénom</label>
-                              <input class="form-control" id="first_name" type="text" placeholder="Enter votre Prénom" required>
+                              <input class="form-control" name="prenom" type="text" disabled="True" placeholder={{e.prenom}} >
                           </div>
                       </div>
                       <div class="col-md-6 mb-3">
                           <div>
                               <label for="last_name">Nom</label>
-                              <input class="form-control" id="last_name" type="text" placeholder="Votre Nom de famille" required>
+                              <input class="form-control" name="nom" disabled="True" type="text" placeholder={{e.nom}} >
                           </div>
                       </div>
                   </div>
@@ -60,69 +132,33 @@
                           <label for="birthday">Date d'anniversaire</label>
                           <div class="input-group">
                               <span class="input-group-text"><span class="far fa-calendar-alt"></span></span>
-                              <input data-datepicker="" class="form-control" id="birthday" type="text" placeholder="jj/mm/aaa" required>                                               
+                              <input type="text" class="form-control" disabled="True" name="date_naiss" type="text" placeholder={{e.date_naiss}} >                                               
                             </div>
                       </div>
+                      {%if user.type_cmp == 'Etudiant'%}
                       <div class="col-md-6 mb-3">
-                          <label for="gender">Genre</label>
-                          <select class="form-select mb-0" id="gender" aria-label="Genre select example">
-                              <option selected>Genre</option>
-                              <option value="1">Femelle</option>
-                              <option value="2">Male</option>
-                          </select>
+                          <label for="gender">Promotion</label>
+                          <input class="form-control" type="text" disabled="True" placeholder={{e.promo}}>
                       </div>
-                  </div>
-                  <div class="row">
+                      {%endif%}
+                      {% if user.type_cmp == 'Enseignant'%}
                       <div class="col-md-6 mb-3">
                           <div class="form-group">
-                              <label for="email">Email</label>
-                              <input class="form-control" id="email" type="email" placeholder="nom@gmail.com" required>
+                              <label for="email">Grade</label>
+                              <input class="form-control" disabled="True" name="grade" type="text" placeholder={{e.grade}} >
                           </div>
                       </div>
-                      <div class="col-md-6 mb-3">
-                          <div class="form-group">
-                              <label for="phone">Téléphone</label>
-                              <input class="form-control" id="phone" type="number" placeholder="043608954" required>
-                          </div>
-                      </div>
+                      {%endif%}
                   </div>
-                  <h2 class="h5 my-4">Localisation</h2>
-                  <div class="row">
-                      <div class="col-sm-9 mb-3">
-                          <div class="form-group">
-                              <label for="address">Adresse</label>
-                              <input class="form-control" id="address" type="text" placeholder="Enter votre adresse" required>
-                          </div>
-                      </div>
-                      <div class="col-sm-3 mb-3">
-                          <div class="form-group">
-                              <label for="number">Numéro de rue</label>
-                              <input class="form-control" id="number" type="number" placeholder="43." required>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="row">
-                      <div class="col-sm-4 mb-3">
-                          <div class="form-group">
-                              <label for="city">Ville</label>
-                              <input class="form-control" id="city" type="text" placeholder="Ville" required>
-                          </div>
-                      </div>
-                      <div class="col-sm-4">
-                          <div class="form-group">
-                              <label for="zip">code postal</label>
-                              <input class="form-control" id="zip" type="tel" placeholder="code postal" required>
-                          </div>
-                      </div>
-                  </div>
+                  
+                 
                   <div class="mt-3">
-                      <button type="submit" class="btn btn-dark">Sauvegarder</button>
                   </div>
-              </form>
+               
           </div>
           <div class="card card-body shadow-sm mb-4 mb-lg-0">
-              <h2 class="h5 mb-4">Alertes et notifications</h2>
-              <ul class="list-group list-group-flush">
+             <!-- <h2 class="h5 mb-4">Alertes et notifications</h2>-->
+              <!--<ul class="list-group list-group-flush">
                   <li class="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
                       <div>
                           <h3 class="h6 mb-1">khadidja</h3>
@@ -159,7 +195,7 @@
                           </div> 
                       </div>
                   </li>
-              </ul>
+              </ul>-->
           </div>
       </div>
       <div class="col-12 col-xl-4">
@@ -168,9 +204,11 @@
                   <div class="card shadow-sm text-center p-0">
                       <div class="profile-cover rounded-top" data-background="/static/assets/img/profile-cover.jpg"></div>
                       <div class="card-body pb-5">
-                          <img src="/media/avatars/{{e.avatar}}" class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait">
+                          <img src={{MEDIA_URL}}{{e.avatar}} class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4" >
                           <h4 class="h3">
                             {{ request.user.username }}
+                            {{MEDIA_URL}}{{e.avatar}}
+                            
                           </h4>
                           <h5 class="fw-normal">
                             {{ request.user.email }}
@@ -186,10 +224,14 @@
                       <div class="d-flex align-items-center">
                           <div class="me-3">
                               <!-- Avatar -->
+                              <form method="post" action="{%url 'ModifierAvatar'%}" enctype="multipart/form-data">
+                                {% csrf_token %}
                               <div class="user-avatar xl-avatar">
-                                  <img class="rounded" src="/static/assets/img/avatar.jpg" alt="change avatar">
+                                  <input type="file" name="avatar" class="form-control" >
                               </div>
-                          </div>
+                              <button class="btn btn-secondary text-dark me-2 dropdown-toggle" type="submit"><span class="fas fa-plus me-2"></span>ajouter image</button>
+                            </form>
+                            </div>
                           <div class="file-field">
                               <div class="d-flex justify-content-xl-center ms-xl-3">
                                   <div class="d-flex">
@@ -204,30 +246,7 @@
                       </div>
                   </div>
               </div>
-              <div class="col-12 col-xl-12">
-                  <div class="card card-body shadow-sm mb-4">
-                      <h2 class="h5 mb-4">Sélectionnez la photo de couverture</h2>
-                      <div class="d-flex align-items-center">
-                          <div class="me-3">
-                              <!-- Avatar -->
-                              <div class="user-avatar xl-avatar">
-                                  <img class="rounded" src="/static/assets/img/avatar.jpg" alt="change cover photo">
-                              </div>
-                          </div>
-                          <div class="file-field">
-                              <div class="d-flex justify-content-xl-center ms-xl-3">
-                                  <div class="d-flex">
-                                    <span class="icon icon-md"><span class="fas fa-paperclip me-3"></span></span> <input type="file">
-                                    <div class="d-md-block text-left">
-                                        <div class="fw-normal text-dark mb-1">Choisissez une image</div>
-                                        <div class="text-gray small">JPG, PNGK</div>
-                                    </div>
-                                  </div>
-                              </div>
-                            </div>                                        
-                      </div>
-                  </div>
-              </div>
+              
           </div>
       </div>
   </div>

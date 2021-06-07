@@ -156,9 +156,26 @@
             </div>
         </div>
       
-  
+        
         
         {%endif%}
+        {%if user.type_cmp == 'Etudiant' and e.promo == ''%}
+        
+            <script>
+               Swal.fire({
+                                position: 'center',
+                                icon:'info',
+                                title:'remplir votre information',
+                                text: "Vous voulez voir les devoirs , remplissez vos informations (promotion) accéder au profil",
+                                showConfirmButton: true,
+                                timer: 10000,
+                                confirmButtonText: 'Fermer',
+
+                            })
+
+            </script>
+        {%endif%}
+        
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->

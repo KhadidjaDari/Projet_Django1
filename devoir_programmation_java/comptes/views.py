@@ -36,7 +36,7 @@ def login_comp(request):
                      Enseignant.save()
                 login(request,user)
                 messages.success(request, "Logged In")
-                return render(request, 'dashboard.html',{'c':c})
+                return redirect('dashboard')
             else:
                 messages.error("please Correct Below Errors")
     else:
@@ -64,7 +64,7 @@ def register(request):
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             u = authenticate(request,email=email,password=password)
             login(request,u)
-            return render(request, 'dashboard.html',{'c':c})
+            return redirect('dashboard')
     else:
         form = RegistrationForm()
 

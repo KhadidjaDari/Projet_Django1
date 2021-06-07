@@ -6,6 +6,8 @@ Copyright (c) 2019 - present AppSeed.us
 from django.urls import path, re_path
 from . import views
 from comptes import views as v
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
 
     # The home page
@@ -17,8 +19,11 @@ urlpatterns = [
     path('dashbord',views.dashboard,name="dashboard"),
     path('ajouter_devoir',views.AjouterDevoir,name='ajouter_devoir'),
     path('Profil',views.Profil,name='Profil'),
+    path('ModifierInfo',views.ModifierInfo,name='ModifierInfo'),
+    path('ModifierAvatar',views.ModifierAvatar,name='ModifierAvatar'),
+    path('ListDevoir',views.ListDevoir,name='ListDevoir'),
     #path('dashboard/', views.dashboard, name='dashboard'),
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
 
-]
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
