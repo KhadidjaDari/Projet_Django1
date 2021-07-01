@@ -7,9 +7,9 @@ import zipfile as z
 import re
 import os
 import sweetify
-from .models import Enseignants,Devoirs,Categorie,Etudiant
+from .models import Enseignants,Devoirs,Categorie,Etudiant,Soumission
 from django.contrib.auth.decorators import login_required
-
+from pathlib import Path
 # Create your views here.
 
 def swwet(request):
@@ -30,6 +30,28 @@ def dashboard(request):
     e=None
     if user.type_cmp == 'Etudiant':
         e=Etudiant.objects.get(user=user)
+        list_devoirs=[]
+        soum=None
+        if e.promo != None:
+            try:
+                soum=Soumission.objects.filter(id_etud=e.pk).values()
+                s=[format(q['id_dev_id']) for q in soum]
+                s = list(map(int,s))
+            except:
+                soum=None
+                s=None
+            try:
+                c=Categorie.objects.filter(promo=e.promo)
+                for cat in c:
+                    list_devoirs.append(Devoirs.objects.filter(module=cat).values())
+                p=[format(d['id']) for d in list_devoirs[0]]
+                devoirs=[]
+                for i in p:
+                    devoirs.append(Devoirs.objects.get(id=i))
+                return render(request,'dashboard.html',{'devoirs':devoirs,'e':e,'s':s})
+            except:
+                sweetify.sweetalert(request,'List des devoirs', button='ok',text="Il n'y a pas de devoirs pour votre promotion !!!",timer=10000,icon='info',)
+                return render(request,'dashboard.html',{'e':e})
     if user.type_cmp == 'Enseignant':
         e=Enseignants.objects.get(user=user) 
     return render(request,'dashboard.html',{'c':c,'e':e})
@@ -118,9 +140,9 @@ def pages(request):
         load_template = request.path.split('/')[-1]
         context['segment'] = load_template
         if load_template == 'dashboard.html':
-            user = request.user
-            c=Categorie.objects.all()      
-            return render(request,'dashboard.html',{'c':c})
+            #user = request.user
+            #c=Categorie.objects.all()      
+            return redirect('dashboard')
         if load_template == 'settings.html':
             return redirect('Profil')
             
@@ -139,27 +161,53 @@ def pages(request):
 def ModifierInfo(request):
     user = request.user
     if request.method == 'POST':
-        nom=request.POST['nom']
-        prenom=request.POST['prenom']
-        date_naiss=request.POST['date_naiss']
+        nom=None
+        if request.POST['nom']:
+            nom=request.POST['nom']
+        prenom=None
+        if request.POST['prenom']:
+            prenom=request.POST['prenom']
+        print(nom)
+        date_naiss=None
+        if request.POST['date_naiss']:
+            date_naiss=request.POST['date_naiss']
+        print(prenom)
+        print(date_naiss)
         e=None
         if user.type_cmp == 'Etudiant':
-            promo=request.POST['promo']
+            promo=None
+            if request.POST['promo']:
+                promo=request.POST['promo']
+            if nom == None and prenom == None and date_naiss == None and promo == None:
+                sweetify.sweetalert(request,'Erreur', button='ok',text="Information non renseignée ",timer=10000,icon='warning')
+ 
             e=Etudiant.objects.get(user=user)
-            e.nom=nom
-            e.prenom=prenom
-            e.date_naiss=date_naiss
-            e.promo=promo
+            if nom != None:
+                e.nom=nom
+            if prenom != None:
+                e.prenom=prenom
+            if date_naiss != None:
+                e.date_naiss=date_naiss
+            if promo != None:
+                e.promo=promo
             e.save()
             sweetify.sweetalert(request,'Modification les informations personnelle', button='ok',text="Modifie avec succès",timer=10000,icon='success',)
             return redirect('Profil')
         if user.type_cmp == 'Enseignant':
-            grade=request.POST['grade']
+            grade=None
+            if request.POST['grade']:
+                grade=request.POST['grade']
+            if nom == None and prenom == None and date_naiss == None and grade == None:
+                sweetify.sweetalert(request,'Erreur', button='ok',text="Information non renseignée ",timer=10000,icon='warning')
             e=Enseignants.objects.get(user=user)
-            e.nom=nom
-            e.prenom=prenom
-            e.date_naiss=date_nais
-            e.grade=grade
+            if nom != None:
+                e.nom=nom
+            if prenom != None:
+                e.prenom=prenom
+            if date_naiss != None:
+                e.date_naiss=date_nais
+            if grade != None:
+                e.grade=grade
             e.save()
             sweetify.sweetalert(request,'Modification les informations personnelle', button='ok',text="Modifie avec succès",timer=10000,icon='success',)
             return redirect('Profil')
@@ -192,6 +240,7 @@ def ModifierAvatar(request):
 @login_required()
 def Profil(request):
     user = request.user
+    print(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     e=None
     if user.type_cmp == 'Enseignant':
         e=Enseignants.objects.get(user=user)
@@ -208,9 +257,13 @@ def ListDevoir(request):
     if user.type_cmp == 'Etudiant':
         e=Etudiant.objects.get(user=user)
         list_devoirs=[]
+        c=None
         if e.promo != None:
-            c=Categorie.objects.filter(promo=e.promo)
-            print(c)
+            try:
+                c=Categorie.objects.filter(promo=e.promo)
+            except:
+                sweetify.sweetalert(request,'List des devoirs', button='ok',text="cette promotion ",timer=10000,icon='error',)
+
             for cat in c:
                 list_devoirs.append(Devoirs.objects.filter(module=cat).values())
             print("*******************************",list_devoirs[0])
@@ -223,3 +276,15 @@ def ListDevoir(request):
             return render(request,'tt.html')
     else:
         return render(request,'tt.html')
+
+
+@login_required()
+def AfficheDevoir(request,id_dev):
+    try:
+        devoir=Devoirs.objects.get(id=id_dev)
+        nom_fichier=devoir.fichier
+        lire=z.ZipFile(nom_fichier,mode='r',)
+        list_name=lire.namelist()
+        print(list_name)
+    except:
+        print("Error")

@@ -55,7 +55,8 @@
           <thead>
               <tr>
                   <th></th>
-                  <th>Titre</th>						
+                  <th>Titre</th>	
+                  <th>Categorie</th>					
                   <th>Type Devoir</th>
                   <th>Dernier Délai</th>
                   <th>Statu</th>
@@ -77,6 +78,9 @@
                   <td>
                       <span class="fw-normal">{{d.titre}}</span>
                   </td>
+                  <td>
+                    <span class="fw-normal">{{d.module.nom}}</span>
+                </td>
                   <td><span class="fw-normal">{{d.type_dev}}</span></td>                        
                   <td><span class="fw-normal">{{d.date_fin}}</span></td>
                   <td><span class="fw-bold text-warning"> non soumise</span></td>

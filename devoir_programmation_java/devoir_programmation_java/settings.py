@@ -14,6 +14,8 @@ from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+#os.path.dirname (os.path.dirname (__file__))
+#Path(__file__).resolve().parent.parent
 AUTH_USER_MODEL = 'comptes.Compte'
 LOGIN_URL='login'
 
@@ -42,6 +44,8 @@ INSTALLED_APPS = [
     'devoir',
     'widget_tweaks',
     'sweetify',
+    'django_media_fixtures',
+
 ]
 
 MIDDLEWARE = [
@@ -59,7 +63,7 @@ ROOT_URLCONF = 'devoir_programmation_java.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates'),os.path.join(BASE_DIR,'media')],
+        'DIRS': [os.path.join(BASE_DIR,'templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,6 +72,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+                
             ],
         },
     },
@@ -122,16 +127,26 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'static')
 STATICFIELS_DIR=[
     os.path.join(BASE_DIR,'static'),
 ]
-MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
+"""MEDIA_FIXTURE_FOLDERNAME='media'
+MEDIA_FIXTURES_FILES_FINDERS = (
+        'django_media_fixtures.finders.FileSystemFinder',      # combined with MEDIA_FIXTURES_FILES_DIRS, choose specific folders
+        'django_media_fixtures.finders.AppDirectoriesFinder',  # default (if you do not set MEDIA_FIXTURES_FILES_FINDERS)
+)
+MEDIA_FIXTURES_FILES_DIRS = [
+    "C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/devoir/media/avatars",
+]"""
+
+#'C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media'
+#os.path.join(BASE_DIR,'media/')
 MEDIA_URL = '/media/'
+MEDIA_ROOT =os.path.join(BASE_DIR,'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

@@ -1,11 +1,9 @@
 {% extends "layouts/base.html" %}
 
 {% block title %} Profil {% endblock %} 
-
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
 {% endblock stylesheets %}
-
 {% block content %}
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
@@ -23,6 +21,8 @@
                 </div>
                 <div class="modal-body form-group">
                     <div class="form-group">
+                        {% load sweetify %}
+                        {% sweetify %}
                   <form method="post" action="{%url 'ModifierInfo'%}">
                     {% csrf_token %}
                       <div class="row">
@@ -50,16 +50,16 @@
                           <div class="col-md-6 mb-3">
                               <label for="gender">Promotion</label>
                               <select class="form-select mb-0" name="promo" aria-label="Genre select example">
-                                  <option selected>L2</option>
-                                  <option value="1">L3</option>
-                                  <option value="2">M1GL</option>
-                                  <option value="2">M2GL</option>
-                                  <option value="2">M1RSD</option>
-                                  <option value="2">M2RSD</option>
-                                  <option value="2">M1MID</option>
-                                  <option value="2">M2MID</option>
-                                  <option value="2">M1SIC</option>
-                                  <option value="2">M2SIC</option>
+                                  <option value="L2">L2</option>
+                                  <option value="L3">L3</option>
+                                  <option value="M1GL">M1GL</option>
+                                  <option value="M2GL">M2GL</option>
+                                  <option value="M1RSD">M1RSD</option>
+                                  <option value="M2RSD">M2RSD</option>
+                                  <option value="M1MID">M1MID</option>
+                                  <option value="M2MID">M2MID</option>
+                                  <option value="M1SIC">M1SIC</option>
+                                  <option value="M2SIC">M2SIC</option>
                               </select>
                           </div>
                           {%endif%}
@@ -204,10 +204,10 @@
                   <div class="card shadow-sm text-center p-0">
                       <div class="profile-cover rounded-top" data-background="/static/assets/img/profile-cover.jpg"></div>
                       <div class="card-body pb-5">
-                          <img src={{MEDIA_URL}}{{e.avatar}} class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4" >
+                          <img src={{e.avatar.url}} class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4" >
                           <h4 class="h3">
                             {{ request.user.username }}
-                            {{MEDIA_URL}}{{e.avatar}}
+                            
                             
                           </h4>
                           <h5 class="fw-normal">

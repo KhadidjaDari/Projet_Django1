@@ -22,8 +22,10 @@ urlpatterns = [
     path('ModifierInfo',views.ModifierInfo,name='ModifierInfo'),
     path('ModifierAvatar',views.ModifierAvatar,name='ModifierAvatar'),
     path('ListDevoir',views.ListDevoir,name='ListDevoir'),
+    path('AfficheDevoir/<int:id_dev>',views.AfficheDevoir,name='AfficheDevoir'),
     #path('dashboard/', views.dashboard, name='dashboard'),
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
 
-]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+urlpatterns +=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
