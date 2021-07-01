@@ -240,7 +240,6 @@ def ModifierAvatar(request):
 @login_required()
 def Profil(request):
     user = request.user
-    print(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     e=None
     if user.type_cmp == 'Enseignant':
         e=Enseignants.objects.get(user=user)
