@@ -10,8 +10,9 @@ import sweetify
 from .models import Enseignants,Devoirs,Categorie,Etudiant,Soumission
 from django.contrib.auth.decorators import login_required
 from pathlib import Path
+from PyPDF2 import PdfFileReader
+from PyPDF2 import PdfFileWriter
 # Create your views here.
-
 def swwet(request):
     return render(request,'test_form.html')
 
@@ -44,10 +45,18 @@ def dashboard(request):
                 c=Categorie.objects.filter(promo=e.promo)
                 for cat in c:
                     list_devoirs.append(Devoirs.objects.filter(module=cat).values())
-                p=[format(d['id']) for d in list_devoirs[0]]
+                #print("*******************************",list_devoirs)
+                khadidja=[]
+                for k in list_devoirs:
+                    p=[format(d['id']) for d in k]
+                    khadidja.append(p)
+                    #print("################",p)
+                    
+                #print("************************khadidja",khadidja)
                 devoirs=[]
-                for i in p:
-                    devoirs.append(Devoirs.objects.get(id=i))
+                for i in khadidja:
+                    for g in i:
+                        devoirs.append(Devoirs.objects.get(id=g))
                 return render(request,'dashboard.html',{'devoirs':devoirs,'e':e,'s':s})
             except:
                 sweetify.sweetalert(request,'List des devoirs', button='ok',text="Il n'y a pas de devoirs pour votre promotion !!!",timer=10000,icon='info',)
@@ -55,6 +64,17 @@ def dashboard(request):
     if user.type_cmp == 'Enseignant':
         e=Enseignants.objects.get(user=user) 
     return render(request,'dashboard.html',{'c':c,'e':e})
+
+
+
+
+
+
+
+
+
+
+
 def VerfierCondition(f):
     try:
         lire=z.ZipFile(f,mode='r',)
@@ -139,9 +159,7 @@ def pages(request):
     try:
         load_template = request.path.split('/')[-1]
         context['segment'] = load_template
-        if load_template == 'dashboard.html':
-            #user = request.user
-            #c=Categorie.objects.all()      
+        if load_template == 'dashboard.html':      
             return redirect('dashboard')
         if load_template == 'settings.html':
             return redirect('Profil')
@@ -157,6 +175,10 @@ def pages(request):
     
         html_template = loader.get_template( 'page-500.html' )
         return HttpResponse(html_template.render(context, request))
+
+
+
+        
 @login_required()
 def ModifierInfo(request):
     user = request.user
@@ -285,5 +307,29 @@ def AfficheDevoir(request,id_dev):
         lire=z.ZipFile(nom_fichier,mode='r',)
         list_name=lire.namelist()
         print(list_name)
-    except:
-        print("Error")
+        e=r'\w\.pdf'
+        w=None
+        for h in list_name:
+            if re.search(e,h):
+                w=h
+        print(w)
+        with lire.open(w) as myfile:
+            output_filename ='C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/devoir/devoir.pdf'
+            document=PdfFileReader(myfile)
+            writer = PdfFileWriter()
+            for x in range(document.numPages):
+                page=document.getPage(x)
+                writer.addPage(page)
+            with open(output_filename, 'wb') as fp:
+                writer.write(fp)
+            #os.system(output_filename)
+            """pdftext = ""
+            for page in range(document.numPages):
+                pageObj = document.getPage(page)
+                pdftext += pageObj.extractText().replace('\n','')
+            print(pdftext)
+            return render(request,'affiche_devoir.html',{'devoir':devoir})"""
+            return redirect('/media/devoir/devoir.pdf')
+    except ValueError:
+        print(ValueError)
+        return render(request,'page-404.html')

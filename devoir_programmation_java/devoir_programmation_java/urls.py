@@ -16,7 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
 	path("", include("devoir.url")),
@@ -24,10 +23,3 @@ urlpatterns = [
     #path('students/', views.index,name="students"),
 
 ]
-
-"""if settings.DEBUG:
-    urlpatterns += patterns('',
-        url(r'^media/(?P<path>.*)$',
-            'django.views.static.serve',
-            {'document_root': settings.MEDIA_ROOT, }),
-    )"""
