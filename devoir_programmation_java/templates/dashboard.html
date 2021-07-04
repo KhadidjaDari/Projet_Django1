@@ -10,7 +10,6 @@
 {% endblock stylesheets %}
 
 {% block content %}
-
 {% if user.type_cmp == 'Enseignant'%}
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
         <div class="btn-toolbar dropdown">
@@ -204,6 +203,7 @@
                       <th class="fw-bold text-warning">Dernier Délai</th>
                       <th class="fw-bold text-warning">Statu</th>
                       <th class="fw-bold text-warning">fichier</th>
+                      <th class="fw-bold text-warning">Soumission</th>
                       
                       <th class="fw-bold text-warning"></th>
                   </tr>
@@ -237,6 +237,7 @@
                           <a href="{%url 'AfficheDevoir' d.id%}">
                           <span class="fw-bold"><button class="btn btn-secondary text-dark me-2 dropdown-toggle">ouvrir le fichier</button>
                           </a></span></td>
+                      <td><span class="fw-bold"><button class="btn btn-secondary text-dark me-2 dropdown-toggle">Soumettre</button></span></td>
     
                       <td>
                           <div class="btn-group">
@@ -265,10 +266,10 @@
                       <li class="page-item">
                           <a class="page-link" href="#">Précédent</a>
                       </li>
-                      <li class="page-item">
+                      <li class="page-item active">
                           <a class="page-link" href="#">1</a>
                       </li>
-                      <li class="page-item active">
+                      <li class="page-item ">
                           <a class="page-link" href="#">2</a>
                       </li>
                       <li class="page-item">
