@@ -79,6 +79,42 @@
                             event.preventDefault()
                 }
               }
+
+
+
+              function ValidationSolution() 
+                    { 
+                    var fichier = document.getElementById('solution'); 
+                    var valeur = fichier.value; 
+                    var extensions = /(\.zip)$/i; 
+                      if (!extensions.exec(valeur))
+                      { 
+                        Swal.fire({
+                                      position: 'center',
+                                      icon: 'warning',
+                                      title:'Erreur',
+                                      text: "Le fichier que vous avez téléchargé ne correspond pas au format .zip",
+                                      showConfirmButton: true,
+                                      timer: 10000,
+                                      confirmButtonText: 'Fermer',
+      
+                                  })
+                        
+                      }
+                      if(event.target.files[0].size>1024*1024){
+                        Swal.fire({
+                                      position: 'center',
+                                      icon:'error',
+                                      title:'Erreur',
+                                      text: "La taille du fichier est trop grande, la taille du fichier ne doit pas dépasser 1 Mo",
+                                      showConfirmButton: true,
+                                      timer: 10000,
+                                      confirmButtonText: 'Fermer',
+      
+                                  })
+                                  event.preventDefault()
+                      }
+                    }
                 </script>
           </div>
             <div class="form-group">
@@ -258,7 +294,7 @@
                                                 <label for="TextInput">
                                                     <span class='fas fa-file-archive fa-1x'></span>
                                                     Fichier de Solution:</label>
-                                                <input type="file"  class="form-control" name="fichier" id="fichier" onchange="return Validation()"> 
+                                                <input type="file"  class="form-control" name="solution" id="solution" onchange="return ValidationSolution()"> 
                                                 
                                               </div>
                                         </div>
@@ -273,41 +309,7 @@
                       
                   </tr>
                   {%endfor%}
-                  <script> 
-                    function Validation() 
-                    { 
-                    var fichier = document.getElementById('fichier'); 
-                    var valeur = fichier.value; 
-                    var extensions = /(\.zip)$/i; 
-                      if (!extensions.exec(valeur))
-                      { 
-                        Swal.fire({
-                                      position: 'center',
-                                      icon: 'warning',
-                                      title:'Erreur',
-                                      text: "Le fichier que vous avez téléchargé ne correspond pas au format .zip",
-                                      showConfirmButton: true,
-                                      timer: 10000,
-                                      confirmButtonText: 'Fermer',
-      
-                                  })
-                        
-                      }
-                      if(event.target.files[0].size>1024*1024){
-                        Swal.fire({
-                                      position: 'center',
-                                      icon:'error',
-                                      title:'Erreur',
-                                      text: "La taille du fichier est trop grande, la taille du fichier ne doit pas dépasser 1 Mo",
-                                      showConfirmButton: true,
-                                      timer: 10000,
-                                      confirmButtonText: 'Fermer',
-      
-                                  })
-                                  event.preventDefault()
-                      }
-                    }
-                      </script>
+                  
                   <!-- Item -->
                               
               </tbody>

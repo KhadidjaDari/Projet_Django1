@@ -31,10 +31,11 @@ def Verifier_Fichier_Solution(fichier):
 
 def Soumission_Etud(request,id_dev):
     user = request.user
+    print('id devoir :',id_dev)
     if request.method == 'POST':
         fichier=None
         try:
-            fichier=request.FILES['fichier']
+            fichier=request.FILES['solution']
             print(os.path.splitext(fichier.name)[1])
             print(z.is_zipfile(fichier))
             if os.path.splitext(fichier.name)[1] != ".xlsx" and z.is_zipfile(fichier) and os.path.splitext(fichier.name)[1] != ".docx" :
