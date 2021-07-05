@@ -23,6 +23,7 @@ urlpatterns = [
     path('ModifierAvatar',views.ModifierAvatar,name='ModifierAvatar'),
     path('ListDevoir',views.ListDevoir,name='ListDevoir'),
     path('AfficheDevoir/<int:id_dev>',views.AfficheDevoir,name='AfficheDevoir'),
+    path('Soumission_Etud/<int:id_dev>',views.Soumission_Etud,name='Soumission_Etud'),
     #path('dashboard/', views.dashboard, name='dashboard'),
     # Matches any html file
     #re_path(r'^.*\.*', views.pages, name='pages'),

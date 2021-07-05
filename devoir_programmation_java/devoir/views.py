@@ -13,6 +13,44 @@ from pathlib import Path
 from PyPDF2 import PdfFileReader
 from PyPDF2 import PdfFileWriter
 # Create your views here.
+def Verifier_Fichier_Solution(fichier):
+    try:
+        print("1111111111111111111111111111111111")
+        lire=z.ZipFile(fichier,mode='r')
+        list_name=lire.namelist()
+        print(list_name)
+        e='main.java'
+        print("222222222222222222222222222222222")
+        w=None
+        for h in list_name:
+            if re.search(e,h):
+                w=h
+        print(w)
+    except ValueError:
+        print(ValueError)
+
+def Soumission_Etud(request,id_dev):
+    user = request.user
+    if request.method == 'POST':
+        fichier=None
+        try:
+            fichier=request.FILES['fichier']
+            print(os.path.splitext(fichier.name)[1])
+            print(z.is_zipfile(fichier))
+            if os.path.splitext(fichier.name)[1] != ".xlsx" and z.is_zipfile(fichier) and os.path.splitext(fichier.name)[1] != ".docx" :
+                print("************************************")
+                Verifier_Fichier_Solution(fichier)
+                print("0000000000000000000000000000000000000000000000000000000")
+                return redirect('dashboard')
+            else:
+                sweetify.sweetalert(request,'Erreur', button='Fermer',text="Le fichier que vous avez téléchargé ne correspond pas au format .zip",timer=10000,icon='warning',footer='format de  fichier à uploader est .zip')
+                return redirect('dashboard')
+
+        except:
+            sweetify.sweetalert(request,'Erreur', button='ok',text="le fichier vide",timer=10000,icon='warning')
+            return redirect('dashboard')
+
+
 def swwet(request):
     return render(request,'test_form.html')
 

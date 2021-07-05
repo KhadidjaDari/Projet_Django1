@@ -21,7 +21,7 @@
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header bg-gradient-secondary">
           <h5 class="modal-title" id="exampleModalLabel">Nouvelle Devoir</h5>
           <!--<div class="form-group">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">About sur le fichier uploade</button>
@@ -195,8 +195,8 @@
       <div class="card card-body shadow-sm table-wrapper table-responsive ">
           <table class="table table-dark table-striped">
               <thead>
-                  <tr>
-                      <th class="fw-bold text-warning"></th>
+                  
+                      
                       <th class="fw-bold text-warning">Titre</th>	
                       <th class="fw-bold text-warning">Categorie</th>					
                       <th class="fw-bold text-warning">Type Devoir</th>
@@ -204,19 +204,13 @@
                       <th class="fw-bold text-warning">Statu</th>
                       <th class="fw-bold text-warning">fichier</th>
                       <th class="fw-bold text-warning">Soumission</th>
-                      
-                      <th class="fw-bold text-warning"></th>
-                  </tr>
+                  
               </thead>
               <tbody>
                   <!-- Item -->
                   {% for d  in devoirs%}
                   <tr>
-                      <td>
-                          <a href="#" class="fw-bold">
-                              
-                          </a>
-                      </td>
+                      
                       <td>
                           <span class="fw-normal">{{d.titre}}</span>
                       </td>
@@ -237,83 +231,83 @@
                           <a href="{%url 'AfficheDevoir' d.id%}">
                           <span class="fw-bold"><button class="btn btn-secondary text-dark me-2 dropdown-toggle">ouvrir le fichier</button>
                           </a></span></td>
-                      <td><span class="fw-bold"><button class="btn btn-secondary text-dark me-2 dropdown-toggle" data-bs-toggle="modal" data-bs-target="#modal-default">Soumettre</button></span></td>
+                      <td><span class="fw-bold"><button class="btn btn-secondary text-dark me-2 dropdown-toggle" data-bs-toggle="modal" data-bs-target="#modal-default{{d.id}}">Soumettre</button></span></td>
                             <!--soumtre devoir-->
-                            <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+                            <div class="modal fade" id="modal-default{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h2 class="h4 modal-title fw-bold text-warning" >Soumettre le devoir {{d.titre}}</h2>
+                                        <div class="modal-header bg-gradient-secondary">
+                                            
+                                            <h2 class="h4 modal-title fw-bold text-dark" >Soumettre le devoir {{d.titre}}</h2>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <span class='fas fa-info-circle  fa-3x'><p class="fw-bold text-danger"> hdhdjdjdjdjdjdj</p></span>
+                                            <br>
+                                            <p class="fw-bold text-danger">
+                                                <span class='fas fa-info-circle fa-2x fa-spin'></span>
+
+                                                Votre fichier de solution doit être au format .zip et  avoir main.java comme programme principal
+                                                
+                                            </p>
+                                            <br>
+                                            <br>
+                                            <form method="post" action="{%url 'Soumission_Etud' d.id%}" enctype="multipart/form-data">
+                                
+                                                {% csrf_token %}
                                             <div class="form-group">
-                                                <label for="TextInput">Fichier de Solution:</label>
-                                                <span class='fas fa-file-archive fa-1x'></span>
+                                                <label for="TextInput">
+                                                    <span class='fas fa-file-archive fa-1x'></span>
+                                                    Fichier de Solution:</label>
                                                 <input type="file"  class="form-control" name="fichier" id="fichier" onchange="return Validation()"> 
-                                                <script> 
-                                                  function Validation() 
-                                                  { 
-                                                  var fichier = document.getElementById('fichier'); 
-                                                  var valeur = fichier.value; 
-                                                  var extensions = /(\.zip)$/i; 
-                                                    if (!extensions.exec(valeur))
-                                                    { 
-                                                      Swal.fire({
-                                                                    position: 'center',
-                                                                    icon: 'warning',
-                                                                    title:'Erreur',
-                                                                    text: "Le fichier que vous avez téléchargé ne correspond pas au format .zip",
-                                                                    showConfirmButton: true,
-                                                                    timer: 10000,
-                                                                    confirmButtonText: 'Fermer',
-                                    
-                                                                })
-                                                      
-                                                    }
-                                                    if(event.target.files[0].size>1024*1024){
-                                                      Swal.fire({
-                                                                    position: 'center',
-                                                                    icon:'error',
-                                                                    title:'Erreur',
-                                                                    text: "La taille du fichier est trop grande, la taille du fichier ne doit pas dépasser 1 Mo",
-                                                                    showConfirmButton: true,
-                                                                    timer: 10000,
-                                                                    confirmButtonText: 'Fermer',
-                                    
-                                                                })
-                                                                event.preventDefault()
-                                                    }
-                                                  }
-                                                    </script>
+                                                
                                               </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary">Soumettre</button>
+                                            <button type="submit" class="btn btn-secondary">Soumettre</button></form>
                                             <button type="button" class="btn btn-dark text-gray ms-auto" data-bs-dismiss="modal">Fermer</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <!--fin-->
-                      <td>
-                          <div class="btn-group">
-                              <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  <span class="icon icon-sm">
-                                      <span class="fas fa-ellipsis-h icon-dark"></span>
-                                  </span>
-                                  <span class="sr-only">Toggle Dropdown</span>
-                              </button>
-                              <div class="dropdown-menu py-0">
-                                  <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
-                                  <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Edit</a>
-                                  <a class="dropdown-item text-danger rounded-bottom" href="#"><span class="fas fa-trash-alt me-2"></span>Remove</a>
-                              </div>
-                          </div>
-                      </td>
+                      
                   </tr>
                   {%endfor%}
+                  <script> 
+                    function Validation() 
+                    { 
+                    var fichier = document.getElementById('fichier'); 
+                    var valeur = fichier.value; 
+                    var extensions = /(\.zip)$/i; 
+                      if (!extensions.exec(valeur))
+                      { 
+                        Swal.fire({
+                                      position: 'center',
+                                      icon: 'warning',
+                                      title:'Erreur',
+                                      text: "Le fichier que vous avez téléchargé ne correspond pas au format .zip",
+                                      showConfirmButton: true,
+                                      timer: 10000,
+                                      confirmButtonText: 'Fermer',
+      
+                                  })
+                        
+                      }
+                      if(event.target.files[0].size>1024*1024){
+                        Swal.fire({
+                                      position: 'center',
+                                      icon:'error',
+                                      title:'Erreur',
+                                      text: "La taille du fichier est trop grande, la taille du fichier ne doit pas dépasser 1 Mo",
+                                      showConfirmButton: true,
+                                      timer: 10000,
+                                      confirmButtonText: 'Fermer',
+      
+                                  })
+                                  event.preventDefault()
+                      }
+                    }
+                      </script>
                   <!-- Item -->
                               
               </tbody>
