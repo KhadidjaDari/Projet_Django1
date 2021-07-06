@@ -14,6 +14,20 @@ from PyPDF2 import PdfFileReader
 from PyPDF2 import PdfFileWriter
 import time
 # Create your views here.
+def MesDevoir(request):
+    user = request.user
+    e=None
+    if user.type_cmp == 'Enseignant':
+        e=Enseignants.objects.get(user=user)
+        devoirs=Devoirs.objects.filter(id_ens=e.pk).values()
+    return render(request,'mes_devoir.html',{'e':e,'devoirs':devoirs})
+def listEtudiant(request):
+    user = request.user
+    e=None
+    etuds=Etudiant.objects.all()
+    if user.type_cmp == 'Enseignant':
+        e=Enseignants.objects.get(user=user)
+    return render(request,'list_etudiants.html',{'e':e,'etuds':etuds})
 def Verifier_Fichier_Solution(fichier):
     try:
         lire=z.ZipFile(fichier,mode='r')
@@ -44,9 +58,11 @@ def Soumission_Etud(request,id_dev):
                         source=myfile.read()
                         main=open("C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/main.java",'wb')
                         main.write(source)
+                        print(main)
+                        #ma ytexcutach la commnde matmdlich .class ==>mna w ro7
                         os.system("javac C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/main.java")
-                        time.sleep(10)
-                        os.system("java C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/main.java >> C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/sortie.txt")
+                        #time.sleep(10)
+                        #os.system("java C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/main.java >> C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/sortie.txt")
                         return redirect('dashboard')
                 else:
                     sweetify.sweetalert(request,'Erreur', button='ok',text="le fichier ne contient pas main.java",timer=10000,icon='warning')

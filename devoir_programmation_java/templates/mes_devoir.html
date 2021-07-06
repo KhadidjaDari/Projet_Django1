@@ -1,0 +1,121 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Mes Devoirs {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock stylesheets %}
+
+{% block content %}
+{% if user.type_cmp == 'Enseignant'%}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 ">
+    <div class="d-block mb-4 mb-md-0">
+        <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">                    
+              <li class="fw-bold text-warning" aria-current="page">Liste des Devoirs</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="btn-toolbar mb-2 mb-md-0">
+       <!--<div class="btn-group">
+            <button type="button" class="btn btn-sm btn-outline-primary">AAA</button>
+            <button type="button" class="btn btn-sm btn-outline-primary">BBB</button>
+        </div>--> 
+    </div>
+</div>
+{% load sweetify %}
+{% sweetify %}
+<div class="card card-body shadow-sm table-wrapper table-responsive ">
+    <table class="table table-dark table-striped">
+        <thead >
+            
+                
+                <th class="fw-bold text-warning"></th>	
+                <th class="fw-bold text-warning"></th>					
+                <th class="fw-bold text-warning"></th>
+                <th class="fw-bold text-warning"></th>
+                <th class="fw-bold text-warning"></th>
+                <th class="fw-bold text-warning"></th>
+                <th class="fw-bold text-warning"></th>
+            
+        </thead>
+        <tbody>
+            <!-- Item -->
+            {%for d in devoirs%}
+            <tr>
+                <td ><span class="fw-bold"></span></td>
+                <td>
+                    <span class="fw-normal">
+                        
+                            <!-- Avatar -->
+                          
+                    </span>
+                </td>
+                <td>
+                  <span class="fw-normal">{{d.titre}}</span>
+              </td>
+                <td><span class="fw-normal">{{d.module.nom}}</span></td>                        
+                <td><span class="fw-normal">{{d.date_fin}}</span></td>
+                <td>  
+                   
+                  <span class="fw-bold">{{d.type_dev}}</span>
+                  
+              </td>
+                <td>
+                    <a href="">
+                    <span class="fw-bold">
+                    </a></span></td>       
+                
+            </tr>
+            {%endfor%}
+            
+            <!-- Item -->
+                        
+        </tbody>
+        <thead>
+            
+                
+            <th class="fw-bold text-warning"></th>	
+            <th class="fw-bold text-warning"></th>					
+            <th class="fw-bold text-warning"></th>
+            <th class="fw-bold text-warning"></th>
+            <th class="fw-bold text-warning"></th>
+            <th class="fw-bold text-warning"></th>
+            <th class="fw-bold text-warning"></th>
+        
+    </thead>
+    </table></div>
+    <div class="card-footer px-3 border-0 d-flex align-items-center justify-content-between">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination mb-0">
+                <li class="page-item">
+                    <a class="page-link" href="#">Précédent</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item ">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">4</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">5</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Suivant</a>
+                </li>
+            </ul>
+        </nav>
+</div>
+{%endif%}
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
