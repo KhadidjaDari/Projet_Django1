@@ -123,6 +123,7 @@ def VerfierCondition(f):
     try:
         lire=z.ZipFile(f,mode='r',)
         list_name=lire.namelist()
+
         e=r'\w\.pdf'
         w=None
         for h in list_name:
@@ -172,6 +173,7 @@ def AjouterDevoir(request):
                     sweetify.sweetalert(request,'Erreur', button='ok',text="le devoir déjà existé",timer=10000,icon='warning')
                     return redirect('dashboard')
             except:
+                print("")
             if os.path.splitext(fichier.name)[1] != ".xlsx" and z.is_zipfile(fichier) and os.path.splitext(fichier.name)[1] != ".docx" :
                 if VerfierCondition(fichier):
                     devoir=Devoirs(titre=titre,fichier=fichier,type_dev=type_dev,date_fin=date_fin,module=C,id_ens=e)
