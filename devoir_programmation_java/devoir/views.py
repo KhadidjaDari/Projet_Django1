@@ -12,22 +12,22 @@ from django.contrib.auth.decorators import login_required
 from pathlib import Path
 from PyPDF2 import PdfFileReader
 from PyPDF2 import PdfFileWriter
+import time
 # Create your views here.
 def Verifier_Fichier_Solution(fichier):
     try:
-        print("1111111111111111111111111111111111")
         lire=z.ZipFile(fichier,mode='r')
         list_name=lire.namelist()
         print(list_name)
         e='main.java'
-        print("222222222222222222222222222222222")
         w=None
         for h in list_name:
             if re.search(e,h):
                 w=h
-        print(w)
+        return w
     except ValueError:
         print(ValueError)
+        return w
 
 def Soumission_Etud(request,id_dev):
     user = request.user
@@ -36,18 +36,27 @@ def Soumission_Etud(request,id_dev):
         fichier=None
         try:
             fichier=request.FILES['solution']
-            print(os.path.splitext(fichier.name)[1])
-            print(z.is_zipfile(fichier))
             if os.path.splitext(fichier.name)[1] != ".xlsx" and z.is_zipfile(fichier) and os.path.splitext(fichier.name)[1] != ".docx" :
-                print("************************************")
-                Verifier_Fichier_Solution(fichier)
-                print("0000000000000000000000000000000000000000000000000000000")
-                return redirect('dashboard')
+                if Verifier_Fichier_Solution(fichier) !=None:
+                    w=Verifier_Fichier_Solution(fichier)
+                    lire=z.ZipFile(fichier,mode='r')
+                    with lire.open(w) as myfile:
+                        source=myfile.read()
+                        main=open("C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/main.java",'wb')
+                        main.write(source)
+                        os.system("javac C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/main.java")
+                        time.sleep(10)
+                        os.system("java C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/main.java >> C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/sortie.txt")
+                        return redirect('dashboard')
+                else:
+                    sweetify.sweetalert(request,'Erreur', button='ok',text="le fichier ne contient pas main.java",timer=10000,icon='warning')
+                    return redirect('dashboard')
             else:
                 sweetify.sweetalert(request,'Erreur', button='Fermer',text="Le fichier que vous avez téléchargé ne correspond pas au format .zip",timer=10000,icon='warning',footer='format de  fichier à uploader est .zip')
                 return redirect('dashboard')
 
-        except:
+        except ValueError:
+            print(ValueError)
             sweetify.sweetalert(request,'Erreur', button='ok',text="le fichier vide",timer=10000,icon='warning')
             return redirect('dashboard')
 
@@ -84,14 +93,10 @@ def dashboard(request):
                 c=Categorie.objects.filter(promo=e.promo)
                 for cat in c:
                     list_devoirs.append(Devoirs.objects.filter(module=cat).values())
-                #print("*******************************",list_devoirs)
                 khadidja=[]
                 for k in list_devoirs:
                     p=[format(d['id']) for d in k]
                     khadidja.append(p)
-                    #print("################",p)
-                    
-                #print("************************khadidja",khadidja)
                 devoirs=[]
                 for i in khadidja:
                     for g in i:
@@ -118,7 +123,6 @@ def VerfierCondition(f):
     try:
         lire=z.ZipFile(f,mode='r',)
         list_name=lire.namelist()
-        print(list_name)
         e=r'\w\.pdf'
         w=None
         for h in list_name:
@@ -168,7 +172,6 @@ def AjouterDevoir(request):
                     sweetify.sweetalert(request,'Erreur', button='ok',text="le devoir déjà existé",timer=10000,icon='warning')
                     return redirect('dashboard')
             except:
-                print("")
             if os.path.splitext(fichier.name)[1] != ".xlsx" and z.is_zipfile(fichier) and os.path.splitext(fichier.name)[1] != ".docx" :
                 if VerfierCondition(fichier):
                     devoir=Devoirs(titre=titre,fichier=fichier,type_dev=type_dev,date_fin=date_fin,module=C,id_ens=e)
@@ -228,12 +231,9 @@ def ModifierInfo(request):
         prenom=None
         if request.POST['prenom']:
             prenom=request.POST['prenom']
-        print(nom)
         date_naiss=None
         if request.POST['date_naiss']:
             date_naiss=request.POST['date_naiss']
-        print(prenom)
-        print(date_naiss)
         e=None
         if user.type_cmp == 'Etudiant':
             promo=None
@@ -282,7 +282,6 @@ def ModifierAvatar(request):
     user = request.user
     if request.method == 'POST':
         img=request.FILES['avatar']
-        print(img)
         if user.type_cmp == 'Etudiant':
            e=Etudiant.objects.get(user=user)
            e.avatar=img
@@ -326,7 +325,6 @@ def ListDevoir(request):
 
             for cat in c:
                 list_devoirs.append(Devoirs.objects.filter(module=cat).values())
-            print("*******************************",list_devoirs[0])
             p=[format(d['id']) for d in list_devoirs[0]]
             devoirs=[]
             for i in p:
