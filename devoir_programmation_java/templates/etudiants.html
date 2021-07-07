@@ -1,0 +1,91 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Mes Devoirs {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock stylesheets %}
+
+{% block content %}
+{% if user.type_cmp == 'Enseignant'%}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 ">
+    <div class="d-block mb-4 mb-md-0">
+        <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">                    
+              <li class="fw-bold text-warning" aria-current="page">Liste des Devoirs</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="btn-toolbar mb-2 mb-md-0">
+       <!--<div class="btn-group">
+            <button type="button" class="btn btn-sm btn-outline-primary">AAA</button>
+            <button type="button" class="btn btn-sm btn-outline-primary">BBB</button>
+        </div>--> 
+    </div>
+</div>
+{% load sweetify %}
+{% sweetify %}
+<div class="card card-body shadow-sm table-wrapper table-responsive ">
+
+    <section class="section section-lg bg-dark text-white">
+        <div class="container">
+            <div class="row justify-content-center mb-5 mb-lg-6">
+                <div class="col-12 text-center">
+                    <h2 class="h1 px-lg-5">List des Etudiants</h2>
+                </div>
+            </div>
+            <div class="row">
+                {%for etud in etuds%}
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card bg-white shadow-soft text-primary rounded mb-4 page-preview  scale-up-2">
+                        <div class="px-3 px-lg-4 py-5 text-center">
+                            <span class="fw-normal">
+                        
+                                <!-- Avatar -->
+                                <img alt="Image placeholder" src="{{etud.avatar.url}}" class="user-avatar lg-avatar rounded-circle">
+                              
+                        </span>
+                         <h5 class="fw-bold text-primary">{{etud.nom}} {{etud.prenom}}</h5>
+                            <p>{{etud.promo}}</p>
+                        </div>
+                    </div>
+                </div>
+                {%endfor%}
+            </div>
+        </div>
+    </section>
+    </div>
+    <div class="card-footer px-3 border-0 d-flex align-items-center justify-content-between">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination mb-0">
+                <li class="page-item">
+                    <a class="page-link" href="#">Précédent</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item ">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">4</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">5</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Suivant</a>
+                </li>
+            </ul>
+        </nav>
+</div>
+{%endif%}
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

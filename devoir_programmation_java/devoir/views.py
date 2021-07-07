@@ -14,6 +14,7 @@ from PyPDF2 import PdfFileReader
 from PyPDF2 import PdfFileWriter
 import time
 # Create your views here.
+@login_required()
 def MesDevoir(request):
     user = request.user
     e=None
@@ -21,6 +22,7 @@ def MesDevoir(request):
         e=Enseignants.objects.get(user=user)
         devoirs=Devoirs.objects.filter(id_ens=e.pk).values()
     return render(request,'mes_devoir.html',{'e':e,'devoirs':devoirs})
+@login_required()
 def listEtudiant(request):
     user = request.user
     e=None
@@ -42,7 +44,7 @@ def Verifier_Fichier_Solution(fichier):
     except ValueError:
         print(ValueError)
         return w
-
+@login_required()
 def Soumission_Etud(request,id_dev):
     user = request.user
     print('id devoir :',id_dev)
@@ -58,9 +60,18 @@ def Soumission_Etud(request,id_dev):
                         source=myfile.read()
                         main=open("C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/main.java",'wb')
                         main.write(source)
+                        main.close()
                         print(main)
                         #ma ytexcutach la commnde matmdlich .class ==>mna w ro7
-                        os.system("javac C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/main.java")
+                        os.chdir("C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions")
+                        os.system("javac main.java 2> erreur.txt")
+                        size=os.path.getsize("erreur.txt")
+                        if size > 0:
+                            erreur=open("erreur.txt","rb").read()
+                            ls_er=re.split('\'|\n|\r|,|\\r|\\n',str(erreur))
+                            print(ls_er)
+                            sweetify.sweetalert(request,'Erreur', button='ok',text=ls_er,timer=10000,icon='error')
+                            return redirect('dashboard')
                         #time.sleep(10)
                         #os.system("java C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/main.java >> C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/sortie.txt")
                         return redirect('dashboard')
@@ -88,7 +99,7 @@ def index(request):
 
 
 
-
+@login_required()
 def dashboard(request):
     user = request.user
     c=Categorie.objects.all() 
