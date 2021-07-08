@@ -34,7 +34,6 @@ def Verifier_Fichier_Solution(fichier):
     try:
         lire=z.ZipFile(fichier,mode='r')
         list_name=lire.namelist()
-        print(list_name)
         e='main.java'
         w=None
         for h in list_name:
@@ -47,7 +46,6 @@ def Verifier_Fichier_Solution(fichier):
 @login_required()
 def Soumission_Etud(request,id_dev):
     user = request.user
-    print('id devoir :',id_dev)
     if request.method == 'POST':
         fichier=None
         try:
@@ -61,17 +59,41 @@ def Soumission_Etud(request,id_dev):
                         main=open("C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/main.java",'wb')
                         main.write(source)
                         main.close()
-                        print(main)
-                        #ma ytexcutach la commnde matmdlich .class ==>mna w ro7
+                        #os.chdir == cd 
                         os.chdir("C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions")
                         os.system("javac main.java 2> erreur.txt")
                         size=os.path.getsize("erreur.txt")
                         if size > 0:
-                            erreur=open("erreur.txt","rb").read()
-                            ls_er=re.split('\'|\n|\r|,|\\r|\\n',str(erreur))
-                            print(ls_er)
-                            sweetify.sweetalert(request,'Erreur', button='ok',text=ls_er,timer=10000,icon='error')
+                            erreur=open("erreur.txt").read().split('\n|,|;|^')
+                            sweetify.sweetalert(request,'Erreur', button='ok',text=erreur,timer=200000,icon='error')
                             return redirect('dashboard')
+                        if size == 0:
+                            try:
+                                devoir=Devoirs.objects.get(id=id_dev)
+                                nom_fichier=devoir.fichier
+                                zip_devoir=z.ZipFile(nom_fichier,mode='r',)
+                                list_name=zip_devoir.namelist()
+                                in_txt="in.txt"
+                                out_txt="out.txt"
+                                for h in list_name:
+                                    if re.search(in_txt,h):
+                                        in_txt=h
+                                    if  re.search(out_txt,h):
+                                        out_txt=h
+                                entre=open("in.txt","wb")
+                                with zip_devoir.open(in_txt) as i:
+                                    entre.write(i.read())
+                                    entre.close()
+                                out_put=open("out.txt","wb")
+                                with zip_devoir.open(out_txt) as o:
+                                    out_put.write(o.read())
+                                    out_put.close
+                                os.system("java main.java<in.txt >>sortie.txt")
+                                
+                            except:
+                                sweetify.sweetalert(request,'Erreur', button='ok',text="Il y a une erreur ou le devoir a été supprimé",timer=200000,icon='error')
+                                return redirect('dashboard')
+
                         #time.sleep(10)
                         #os.system("java C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/main.java >> C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/sortie.txt")
                         return redirect('dashboard')
