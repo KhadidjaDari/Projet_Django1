@@ -13,7 +13,43 @@ from pathlib import Path
 from PyPDF2 import PdfFileReader
 from PyPDF2 import PdfFileWriter
 import time
+import filecmp 
+import warnings
 # Create your views here.
+path=os.path.abspath(".")+"\media"
+chemin=os.path.abspath(".")
+def TestTrue(fichier1,fichier2,path):
+    f1=None
+    f2=None
+    if path == "":
+        f1=fichier1
+        f2=fichier2
+    else:
+        f1=path+fichier1
+        f2=path+fichier2
+    if os.path.getsize(f1)==os.path.getsize(f2):
+        if filecmp.cmp(f1,f2):
+            return True
+    f_max=None
+    f_min=None
+    if os.path.getsize(f1)>os.path.getsize(f2):
+        f_max=f1
+        f_min=f2
+    if os.path.getsize(f2)>os.path.getsize(f1):
+        f_max=f2
+        f_min=f1
+    a=open(f_max).read().split('\n')
+    b=open(f_min).read().split('\n')
+    if len(a)==len(b)+1:
+        if a[-1]== "":
+            if b  == a[0:-1]:
+                return True
+            else :
+                return False
+    return False
+
+
+
 @login_required()
 def MesDevoir(request):
     user = request.user
@@ -44,8 +80,7 @@ def Verifier_Fichier_Solution(fichier):
         print(ValueError)
         return w
 @login_required()
-def Soumission_Etud(request,id_dev):
-    user = request.user
+def Soumission_Etud(request,id_dev,id_etud):
     if request.method == 'POST':
         fichier=None
         try:
@@ -56,11 +91,11 @@ def Soumission_Etud(request,id_dev):
                     lire=z.ZipFile(fichier,mode='r')
                     with lire.open(w) as myfile:
                         source=myfile.read()
-                        main=open("C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions/main.java",'wb')
+                        main=open(path+"\solutions\main.java",'wb')
                         main.write(source)
                         main.close()
                         #os.chdir == cd 
-                        os.chdir("C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/solutions")
+                        os.chdir(path+"\solutions")
                         os.system("javac main.java 2> erreur.txt")
                         size=os.path.getsize("erreur.txt")
                         if size > 0:
@@ -87,10 +122,38 @@ def Soumission_Etud(request,id_dev):
                                 out_put=open("out.txt","wb")
                                 with zip_devoir.open(out_txt) as o:
                                     out_put.write(o.read())
-                                    out_put.close
-                                os.system("java main.java<in.txt >>sortie.txt")
+                                    out_put.close()
+                                if os.path.exists("sortie.txt"):
+                                    os.remove("sortie.txt")     #pour supprimer sortie.txt
+                                os.system("java main.java< in.txt >> sortie.txt")
+                                Note=0
+                                q=TestTrue("sortie.txt","out.txt",path+"\solutions\\")
+                                if q:
+                                    Note=5
+                                    os.chdir(chemin)
+                                    etudiant=Etudiant.objects.get(id=id_etud)
+                                    try:
+                                        som_dev=None
+                                        som_dev=Soumission.objects.filter(id_etud=etudiant,id_dev=devoir).values()
+                                        if som_dev == None:
+                                            som=Soumission(id_etud=etudiant,id_dev=devoir,note=Note,solution=fichier)
+                                            som.save()
+                                            sweetify.sweetalert(request,'Evaluation',text="la note de votre soumission est "+str(Note)+"/5",timer=10000,icon='success',)
+                                            return redirect('dashboard')
+                                        else:
+                                            #sweetify.sweetalert(request,'Soumission existe',text="",timer=10000,icon='warning',)
+                                            
+                                            return redirect('dashboard')
+                                    except ValueError:
+                                        print("erreur du soumission !!!")
+                                        print(ValueError)
+                                else:
+                                    sweetify.sweetalert(request,'Evaluation',text="la note de votre soumission est "+str(Note)+"/5 vérifier votre code",timer=10000,icon='warning',)
+                                    return redirect('dashboard')
+
                                 
-                            except:
+                            except ValueError:
+                                print(ValueError)
                                 sweetify.sweetalert(request,'Erreur', button='ok',text="Il y a une erreur ou le devoir a été supprimé",timer=200000,icon='error')
                                 return redirect('dashboard')
 
@@ -227,8 +290,8 @@ def AjouterDevoir(request):
                 if VerfierCondition(fichier):
                     devoir=Devoirs(titre=titre,fichier=fichier,type_dev=type_dev,date_fin=date_fin,module=C,id_ens=e)
                     devoir.save()
-                    old_file = os.path.join("C:\\Users\\Khadija\\Desktop\\Django_Projects\\devoir_programmation_java\\media\\devoir",fichier.name)
-                    new_file = os.path.join("C:\\Users\\Khadija\\Desktop\\Django_Projects\\devoir_programmation_java\\media\\devoir",titre+'_'+i+'.zip')
+                    old_file = os.path.join(path+"\devoir",fichier.name)
+                    new_file = os.path.join(path+"\devoir",titre+'_'+i+'.zip')
                     os.rename(old_file, new_file)
                     devoir.fichier='devoir/'+titre+'_'+i+'.zip'
                     devoir.save()
@@ -402,7 +465,7 @@ def AfficheDevoir(request,id_dev):
                 w=h
         print(w)
         with lire.open(w) as myfile:
-            output_filename ='C:/Users/Khadija/Desktop/Django_Projects/devoir_programmation_java/media/devoir/devoir.pdf'
+            output_filename =path+"\devoir\devoir.pdf"
             document=PdfFileReader(myfile)
             writer = PdfFileWriter()
             for x in range(document.numPages):
