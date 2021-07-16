@@ -265,19 +265,7 @@
                         {% endif %}
                     </td>
                       <td>
-                        <script>
-                            function confirmationsoum(){
-                               var t =confirm("tu es sur pou resoummetre le devoir");
-                               if(t){
-                                document.getElementById("modal-default{{d.id}}").style.visibility="visible";
-                               }
-                               else{
-                                document.getElementById("modal-default{{d.id}}").style.visibility="hidden";
-    
-                               }
-                            }
-    
-                        </script>
+                        
                           <a href="{%url 'AfficheDevoir' d.id%}">
                           <span class="fw-bold"><button class="btn btn-secondary text-dark me-2 dropdown-toggle">ouvrir le fichier</button>
                           </a></span></td>
@@ -285,6 +273,18 @@
                     
                     </span></td>
                     
+                    <script>
+                        function confirmationsoum(){
+                           var t =confirm("Tu es sûr pour resoummetre le devoir");
+                           if(t){
+                            document.getElementById("modal-default{{d.id}}").style.visibility="visible";
+                           }
+                           else{
+                            document.getElementById("modal-default{{d.id}}").style.visibility="hidden";
+                            document.location.href="{%url 'dashboard'%}";
+                           }
+                        }
+                    </script>
                             <!--soumtre devoir-->
                             <div class="modal fade" id="modal-default{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">

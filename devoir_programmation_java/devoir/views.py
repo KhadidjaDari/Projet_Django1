@@ -141,6 +141,7 @@ def Soumission_Etud(request,id_dev,id_etud):
         Note=0
         fichier=request.FILES['solution']
         q=TraitementSoumission(request,fichier,id_dev)
+        print(q)
         if q:
             Note=5
             os.chdir(chemin)
@@ -155,8 +156,12 @@ def Soumission_Etud(request,id_dev,id_etud):
                     sweetify.sweetalert(request,'Evaluation',text="la note de votre soumission est "+str(Note)+"/5",timer=10000,icon='success',)
                     return redirect('dashboard')
                 else:
-                    #sweetify.sweetalert(request,'Soumission existe',text="",timer=10000,icon='warning',)
-                    #messages.info(request,"do you wante !!")
+                    dd=[format(d['id']) for d in som_dev]
+                    gg=Soumission.objects.get(id=dd[0])
+                    gg.delete()
+                    som=Soumission(id_etud=etudiant,id_dev=devoir,note=Note,solution=fichier)
+                    som.save()
+                    sweetify.sweetalert(request,'Evaluation',text="la note de votre soumission est "+str(Note)+"/5",timer=10000,icon='success',)
                     return redirect('dashboard')
             except:
                 sweetify.sweetalert(request,'Erreur', button='ok',text="Il y a une erreur ou le devoir a été supprimé",timer=200000,icon='error')
