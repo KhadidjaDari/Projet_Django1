@@ -211,6 +211,7 @@
             </script>
         {%endif%}
         {% if user.type_cmp == 'Etudiant'%}
+        
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 ">
           <div class="d-block mb-4 mb-md-0">
               <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
@@ -260,14 +261,30 @@
                         <span class="fw-bold text-success">soumise</span>
                         {% else %}
                         
-                        <span class="fw-bold text-warning"> non soumise</span>
+                        <span class="fw-bold text-warning" id="non_soumise"> non soumise</span>
                         {% endif %}
                     </td>
                       <td>
+                        <script>
+                            function confirmationsoum(){
+                               var t =confirm("tu es sur pou resoummetre le devoir");
+                               if(t){
+                                document.getElementById("modal-default{{d.id}}").style.visibility="visible";
+                               }
+                               else{
+                                document.getElementById("modal-default{{d.id}}").style.visibility="hidden";
+    
+                               }
+                            }
+    
+                        </script>
                           <a href="{%url 'AfficheDevoir' d.id%}">
                           <span class="fw-bold"><button class="btn btn-secondary text-dark me-2 dropdown-toggle">ouvrir le fichier</button>
                           </a></span></td>
-                      <td><span class="fw-bold"><button class="btn btn-secondary text-dark me-2 dropdown-toggle" data-bs-toggle="modal" data-bs-target="#modal-default{{d.id}}">Soumettre</button></span></td>
+                      <td><span class="fw-bold"><button class="btn btn-secondary text-dark me-2 dropdown-toggle" data-bs-toggle="modal" data-bs-target="#modal-default{{d.id}}" {%if d.id in s%} onclick="confirmationsoum()" {%endif%}>Soumettre</button>
+                    
+                    </span></td>
+                    
                             <!--soumtre devoir-->
                             <div class="modal fade" id="modal-default{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
