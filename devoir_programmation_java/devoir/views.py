@@ -48,6 +48,7 @@ def TestTrue(fichier1,fichier2,path):
             else :
                 return False
     return False
+
 def Verifier_Fichier_Solution(fichier):
     try:
         lire=z.ZipFile(fichier,mode='r')
@@ -61,62 +62,7 @@ def Verifier_Fichier_Solution(fichier):
     except ValueError:
         print(ValueError)
         return w
-def TraitementSoumission(request,fichier,id_dev):
-    if os.path.splitext(fichier.name)[1] != ".xlsx" and z.is_zipfile(fichier) and os.path.splitext(fichier.name)[1] != ".docx" :
-        if Verifier_Fichier_Solution(fichier) !=None:
-            w=Verifier_Fichier_Solution(fichier)
-            lire=z.ZipFile(fichier,mode='r')
-            with lire.open(w) as myfile:
-                source=myfile.read()
-                main=open(path+"\solutions\main.java",'wb')
-                main.write(source)
-                main.close()
-                #os.chdir == cd 
-                os.chdir(path+"\solutions")
-                os.system("javac main.java 2> erreur.txt")
-                size=os.path.getsize("erreur.txt")
-                if size > 0:
-                    erreur=open("erreur.txt").read().split('\n|,|;|^')
-                    sweetify.sweetalert(request,'Erreur', button='ok',text=erreur,timer=200000,icon='error')
-                    return redirect('dashboard')
-                if size == 0:
-                    try:
-                        devoir=Devoirs.objects.get(id=id_dev)
-                        nom_fichier=devoir.fichier
-                        zip_devoir=z.ZipFile(nom_fichier,mode='r',)
-                        list_name=zip_devoir.namelist()
-                        in_txt="in.txt"
-                        out_txt="out.txt"
-                        for h in list_name:
-                            if re.search(in_txt,h):
-                                in_txt=h
-                            if re.search(out_txt,h):
-                                out_txt=h
-                        entre=open("in.txt","wb")
-                        with zip_devoir.open(in_txt) as i:
-                            entre.write(i.read())
-                            entre.close()
-                            out_put=open("out.txt","wb")
-                        with zip_devoir.open(out_txt) as o:
-                            out_put.write(o.read())
-                            out_put.close()
-                            if os.path.exists("sortie.txt"):
-                                os.remove("sortie.txt")#pour supprimer sortie.txt
-                            q=False
-                            os.system("java main.java< in.txt >> sortie.txt")
-                            q=TestTrue("sortie.txt","out.txt",path+"\solutions\\")
-                            return q
-                    except:
-                        sweetify.sweetalert(request,'Erreur', button='ok',text="Il y a une erreur ou le devoir a été supprimé",timer=200000,icon='error')
-                        return redirect('dashboard')
-        else:
-            sweetify.sweetalert(request,'Erreur', button='ok',text="le fichier ne contient pas main.java",timer=10000,icon='warning')
-            return redirect('dashboard')
-    else:
-        sweetify.sweetalert(request,'Erreur', button='Fermer',text="Le fichier que vous avez téléchargé ne correspond pas au format .zip",timer=10000,icon='warning',footer='format de  fichier à uploader est .zip')
-        return redirect('dashboard')
-
-
+        
 @login_required()
 def MesDevoir(request):
     user = request.user
@@ -136,63 +82,112 @@ def listEtudiant(request):
 
 @login_required()
 def Soumission_Etud(request,id_dev,id_etud):
-    if request.method == 'POST':
-        fichier=None
+    user=request.user
+    if request.method == 'POST' and user.type_cmp=="Etudiant":
         Note=0
         fichier=request.FILES['solution']
-        q=TraitementSoumission(request,fichier,id_dev)
-        user=request.user
         i=str(user.pk)
-        print(q)
-        if q:
-            Note=5
-            os.chdir(chemin)
-            etudiant=Etudiant.objects.get(id=id_etud)
-            try:
-                devoir=devoir=Devoirs.objects.get(id=id_dev)
-                som_dev=None
-                som_dev=Soumission.objects.filter(id_etud=etudiant,id_dev=devoir).values()
-                if som_dev == None:
-                    som=Soumission(id_etud=etudiant,id_dev=devoir,note=Note,solution=fichier)
-                    som.save()
-                    old_file = os.path.join(path+"\solutions",fichier.name)
-                    new_file = os.path.join(path+"\solutions",fichier.name.split('.')[0]+'_'+i+'.zip')
-                    os.rename(old_file, new_file)
-                    som.solution='solutions/'+fichier.name.split('.')[0]+'_'+i+'.zip'
-                    som.save()
-                    sweetify.sweetalert(request,'Evaluation',text="la note de votre soumission est "+str(Note)+"/5",timer=10000,icon='success',)
-                    return redirect('dashboard')
-                else:
-                    dd=[format(d['id']) for d in som_dev]
-                    gg=Soumission.objects.get(id=dd[0])
-                    print("gggggggggggg=",gg)
-                    solution_name=str(gg.solution)
-                    print(solution_name)
-                    print(solution_name.split('/')[-1])
-                    if os.path.exists(path+"/"+solution_name):
-                        os.remove(path+"/"+solution_name)
-                    gg.delete()
-                    som=Soumission(id_etud=etudiant,id_dev=devoir,note=Note,solution=fichier)
-                    som.save()
-                    old_file = os.path.join(path+"\solutions",fichier.name)
-                    print(fichier.name.split('.')[0])
-                    new_file = os.path.join(path+"\solutions",fichier.name.split('.')[0]+'_'+i+'.zip')
-                    os.rename(old_file, new_file)
-                    som.solution='solutions/'+fichier.name.split('.')[0]+'_'+i+'.zip'
-                    som.save()
-                    sweetify.sweetalert(request,'Evaluation',text="la note de votre soumission est "+str(Note)+"/5",timer=10000,icon='success',)
-                    return redirect('dashboard')
-            except:
-                sweetify.sweetalert(request,'Erreur', button='ok',text="Il y a une erreur ou le devoir a été supprimé",timer=200000,icon='error')
-                return redirect('dashboard')
+        if os.path.splitext(fichier.name)[1] != ".xlsx" and z.is_zipfile(fichier) and os.path.splitext(fichier.name)[1] != ".docx" :
+            if Verifier_Fichier_Solution(fichier) !=None:
+                print("main exist !!")
+                w=Verifier_Fichier_Solution(fichier)
+                lire=z.ZipFile(fichier,mode='r')
+                with lire.open(w) as myfile:
+                    source=myfile.read()
+                    main=open(path+"\solutions\main.java",'wb')
+                    main.write(source)
+                    main.close()
+                    #os.chdir == cd 
+                    os.chdir(path+"\solutions")
+                    os.system("javac main.java 2> erreur.txt")
+                    size=os.path.getsize("erreur.txt")
+                    if size > 0:
+                        erreur=open("erreur.txt").read().split('\n|,|;|^')
+                        sweetify.sweetalert(request,'Erreur', button='ok',text=erreur,timer=200000,icon='error')
+                        return redirect('dashboard')
+                    if size == 0:
+                        try:
+                            devoir=Devoirs.objects.get(id=id_dev)
+                            nom_fichier=devoir.fichier
+                            zip_devoir=z.ZipFile(nom_fichier,mode='r',)
+                            list_name=zip_devoir.namelist()
+                            in_txt="in.txt"
+                            out_txt="out.txt"
+                            for h in list_name:
+                                if re.search(in_txt,h):
+                                    in_txt=h
+                                if re.search(out_txt,h):
+                                    out_txt=h
+                            entre=open("in.txt","wb")
+                            with zip_devoir.open(in_txt) as i:
+                                entre.write(i.read())
+                                entre.close()
+                                out_put=open("out.txt","wb")
+                            with zip_devoir.open(out_txt) as o:
+                                out_put.write(o.read())
+                                out_put.close()
+                                if os.path.exists("sortie.txt"):
+                                    os.remove("sortie.txt")#pour supprimer sortie.txt
+                                q=False
+                                os.system("java main.java< in.txt >> sortie.txt")
+                                q=TestTrue("sortie.txt","out.txt",path+"\solutions\\")
+                                if q:
+                                    Note=5
+                                    os.chdir(chemin)
+                                    etudiant=Etudiant.objects.get(id=id_etud)
+                                    som_dev=None
+                                    som_dev=Soumission.objects.filter(id_etud=etudiant,id_dev=devoir).values()
+                                    if som_dev == None:
+                                        som=Soumission(id_etud=etudiant,id_dev=devoir,note=Note,solution=fichier)
+                                        som.save()
+                                        old_file = os.path.join(path+"\solutions",fichier.name)
+                                        new_file = os.path.join(path+"\solutions",fichier.name.split('.')[0]+'_'+i+'.zip')
+                                        os.rename(old_file, new_file)
+                                        som.solution='solutions/'+fichier.name.split('.')[0]+'_'+i+'.zip'
+                                        som.save()
+                                        sweetify.sweetalert(request,'Evaluation',text="la note de votre soumission est "+str(Note)+"/5",timer=10000,icon='success',)
+                                        return redirect('dashboard')
+                                    else:
+                                        dd=[format(d['id']) for d in som_dev]
+                                        gg=Soumission.objects.get(id=dd[0])
+                                        print("gggggggggggg=",gg)
+                                        solution_name=str(gg.solution)
+                                        print(solution_name)
+                                        print(solution_name.split('/')[-1])
+                                        if os.path.exists(path+"/"+solution_name):
+                                            os.remove(path+"/"+solution_name)
+                                        gg.delete()
+                                        som=Soumission(id_etud=etudiant,id_dev=devoir,note=Note,solution=fichier)
+                                        som.save()
+                                        old_file = os.path.join(path+"\solutions",fichier.name)
+                                        print(fichier.name.split('.')[0])
+                                        new_file = os.path.join(path+"\solutions",fichier.name.split('.')[0]+'_'+i+'.zip')
+                                        os.rename(old_file, new_file)
+                                        som.solution='solutions/'+fichier.name.split('.')[0]+'_'+i+'.zip'
+                                        som.save()
+                                        sweetify.sweetalert(request,'Evaluation',text="la note de votre soumission est "+str(Note)+"/5",timer=10000,icon='success',)
+                                        return redirect('dashboard')
+                                else:
+                                    sweetify.sweetalert(request,'Evaluation',text="la note de votre soumission est "+str(Note)+"/5 vérifier votre code",timer=10000,icon='warning',)
+                                    return redirect('dashboard')
+                        except:
+                            sweetify.sweetalert(request,'Erreur', button='ok',text="Il y a une erreur ou le devoir a été supprimé",timer=200000,icon='error')
+                            return redirect('dashboard')
             else:
-                sweetify.sweetalert(request,'Evaluation',text="la note de votre soumission est "+str(Note)+"/5 vérifier votre code",timer=10000,icon='warning',)
+                sweetify.sweetalert(request,'Erreur', button='ok',text="le fichier ne contient pas main.java",timer=10000,icon='warning')
                 return redirect('dashboard')
+        else:
+            sweetify.sweetalert(request,'Erreur', button='Fermer',text="Le fichier que vous avez téléchargé ne correspond pas au format .zip",timer=10000,icon='warning',footer='format de  fichier à uploader est .zip')
+            return redirect('dashboard')   #probleme f return redirect
+    else:
+        return redirect('dashboard')
+            
+
 
 
 
 def index(request):
- return render(request,'home.html')
+    return render(request,'home.html')
 
 
 
