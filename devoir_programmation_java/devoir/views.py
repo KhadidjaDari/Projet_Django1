@@ -141,6 +141,8 @@ def Soumission_Etud(request,id_dev,id_etud):
         Note=0
         fichier=request.FILES['solution']
         q=TraitementSoumission(request,fichier,id_dev)
+        user=request.user
+        i=str(user.pk)
         print(q)
         if q:
             Note=5
@@ -153,13 +155,30 @@ def Soumission_Etud(request,id_dev,id_etud):
                 if som_dev == None:
                     som=Soumission(id_etud=etudiant,id_dev=devoir,note=Note,solution=fichier)
                     som.save()
+                    old_file = os.path.join(path+"\solutions",fichier.name)
+                    new_file = os.path.join(path+"\solutions",fichier.name.split('.')[0]+'_'+i+'.zip')
+                    os.rename(old_file, new_file)
+                    som.solution='solutions/'+fichier.name.split('.')[0]+'_'+i+'.zip'
+                    som.save()
                     sweetify.sweetalert(request,'Evaluation',text="la note de votre soumission est "+str(Note)+"/5",timer=10000,icon='success',)
                     return redirect('dashboard')
                 else:
                     dd=[format(d['id']) for d in som_dev]
                     gg=Soumission.objects.get(id=dd[0])
+                    print("gggggggggggg=",gg)
+                    solution_name=str(gg.solution)
+                    print(solution_name)
+                    print(solution_name.split('/')[-1])
+                    if os.path.exists(path+"/"+solution_name):
+                        os.remove(path+"/"+solution_name)
                     gg.delete()
                     som=Soumission(id_etud=etudiant,id_dev=devoir,note=Note,solution=fichier)
+                    som.save()
+                    old_file = os.path.join(path+"\solutions",fichier.name)
+                    print(fichier.name.split('.')[0])
+                    new_file = os.path.join(path+"\solutions",fichier.name.split('.')[0]+'_'+i+'.zip')
+                    os.rename(old_file, new_file)
+                    som.solution='solutions/'+fichier.name.split('.')[0]+'_'+i+'.zip'
                     som.save()
                     sweetify.sweetalert(request,'Evaluation',text="la note de votre soumission est "+str(Note)+"/5",timer=10000,icon='success',)
                     return redirect('dashboard')
