@@ -86,7 +86,6 @@ def Soumission_Etud(request,id_dev,id_etud):
     if request.method == 'POST' and user.type_cmp=="Etudiant":
         Note=0
         fichier=request.FILES['solution']
-        i=str(user.pk)
         if os.path.splitext(fichier.name)[1] != ".xlsx" and z.is_zipfile(fichier) and os.path.splitext(fichier.name)[1] != ".docx" :
             if Verifier_Fichier_Solution(fichier) !=None:
                 print("main exist !!")
@@ -131,12 +130,14 @@ def Soumission_Etud(request,id_dev,id_etud):
                                 q=False
                                 os.system("java main.java< in.txt >> sortie.txt")
                                 q=TestTrue("sortie.txt","out.txt",path+"\solutions\\")
+                                print("q=",q)
                                 if q:
                                     Note=5
                                     os.chdir(chemin)
                                     etudiant=Etudiant.objects.get(id=id_etud)
                                     som_dev=None
-                                    som_dev=Soumission.objects.filter(id_etud=etudiant,id_dev=devoir).values()
+                                    if Soumission.objects.filter(id_etud=etudiant,id_dev=devoir).values():
+                                        som_dev=Soumission.objects.filter(id_etud=etudiant,id_dev=devoir).values()
                                     if som_dev == None:
                                         som=Soumission(id_etud=etudiant,id_dev=devoir,note=Note,solution=fichier)
                                         som.save()
@@ -160,15 +161,21 @@ def Soumission_Etud(request,id_dev,id_etud):
                                         som=Soumission(id_etud=etudiant,id_dev=devoir,note=Note,solution=fichier)
                                         som.save()
                                         old_file = os.path.join(path+"\solutions",fichier.name)
-                                        print(fichier.name.split('.')[0])
-                                        new_file = os.path.join(path+"\solutions",fichier.name.split('.')[0]+'_'+i+'.zip')
-                                        os.rename(old_file, new_file)
+                                        print(old_file)
+                                        i=str(user.pk)
+                                        new_file=os.path.join(path+"\solutions",fichier.name.split('.')[0]+'_'+i+'.zip')
+                                        print('new_file -------------------------------',new_file)
+                                        os.rename(old_file,new_file)
+                                        print('-------------------------------')
                                         som.solution='solutions/'+fichier.name.split('.')[0]+'_'+i+'.zip'
+                                        print('-------------------------------')
                                         som.save()
-                                        sweetify.sweetalert(request,'Evaluation',text="la note de votre soumission est "+str(Note)+"/5",timer=10000,icon='success',)
+                                        print('-------------------------------')
+                                        sweetify.sweetalert(request,'Evaluation', button='ok',text="la note de votre soumission est "+str(Note)+"/5",timer=10000,icon='success',)
+                                        print('-------------------------------')
                                         return redirect('dashboard')
                                 else:
-                                    sweetify.sweetalert(request,'Evaluation',text="la note de votre soumission est "+str(Note)+"/5 vérifier votre code",timer=10000,icon='warning',)
+                                    sweetify.sweetalert(request,'Evaluation', button='ok',text="la note de votre soumission est "+str(Note)+"/5 vérifier votre code",timer=10000,icon='warning',)
                                     return redirect('dashboard')
                         except:
                             sweetify.sweetalert(request,'Erreur', button='ok',text="Il y a une erreur ou le devoir a été supprimé",timer=200000,icon='error')

@@ -1,11 +1,21 @@
+
 import java.util.*;
-class SRectangle {
-    public static void main(String arg[]){
-    double s=0.0;
-    Scanner c = new Scanner(System.in);
-    double largeur=c.nextDouble();
-    double heuteur=c.nextDouble();
-    s=largeur*heuteur;
-    System.out.println(s)
-    }    
+ class Main {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        Scanner c =new Scanner(System.in);
+        int N=c.nextInt();
+        int fct=1;
+        for(int i=N;i>=1;i--){
+        fct=fct*i;
+        }
+
+        System.out.print(fct);
+        
+    }
+    
 }
