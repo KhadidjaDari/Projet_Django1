@@ -85,10 +85,14 @@ def Soumission_Etud(request,id_dev,id_etud):
     user=request.user
     if request.method == 'POST' and user.type_cmp=="Etudiant":
         Note=0
-        fichier=request.FILES['solution']
+        fichier=None
+        try:
+            fichier=request.FILES['solution']
+        except:
+            sweetify.sweetalert(request,'Erreur', button='ok',text="Vous n'avez pas uploade le fichier !!",timer=10000,icon='warning')
+            return redirect('dashboard')
         if os.path.splitext(fichier.name)[1] != ".xlsx" and z.is_zipfile(fichier) and os.path.splitext(fichier.name)[1] != ".docx" :
             if Verifier_Fichier_Solution(fichier) !=None:
-                print("main exist !!")
                 w=Verifier_Fichier_Solution(fichier)
                 lire=z.ZipFile(fichier,mode='r')
                 with lire.open(w) as myfile:
@@ -151,10 +155,7 @@ def Soumission_Etud(request,id_dev,id_etud):
                                     else:
                                         dd=[format(d['id']) for d in som_dev]
                                         gg=Soumission.objects.get(id=dd[0])
-                                        print("gggggggggggg=",gg)
                                         solution_name=str(gg.solution)
-                                        print(solution_name)
-                                        print(solution_name.split('/')[-1])
                                         if os.path.exists(path+"/"+solution_name):
                                             os.remove(path+"/"+solution_name)
                                         gg.delete()
@@ -164,15 +165,10 @@ def Soumission_Etud(request,id_dev,id_etud):
                                         print(old_file)
                                         i=str(user.pk)
                                         new_file=os.path.join(path+"\solutions",fichier.name.split('.')[0]+'_'+i+'.zip')
-                                        print('new_file -------------------------------',new_file)
                                         os.rename(old_file,new_file)
-                                        print('-------------------------------')
                                         som.solution='solutions/'+fichier.name.split('.')[0]+'_'+i+'.zip'
-                                        print('-------------------------------')
                                         som.save()
-                                        print('-------------------------------')
                                         sweetify.sweetalert(request,'Evaluation', button='ok',text="la note de votre soumission est "+str(Note)+"/5",timer=10000,icon='success',)
-                                        print('-------------------------------')
                                         return redirect('dashboard')
                                 else:
                                     sweetify.sweetalert(request,'Evaluation', button='ok',text="la note de votre soumission est "+str(Note)+"/5 vérifier votre code",timer=10000,icon='warning',)
@@ -283,7 +279,7 @@ def AjouterDevoir(request):
             try:
                 fichier=request.FILES['fichier']
             except:
-                sweetify.sweetalert(request,'Erreur', button='ok',text="le fichier vide",timer=10000,icon='warning')
+                sweetify.sweetalert(request,'Erreur', button='ok',text="Vous n'avez pas uploade le fichier !!",timer=10000,icon='warning')
                 return redirect('dashboard')
             type_dev=request.POST['type_dev']
             date_fin=request.POST['date_fin']
