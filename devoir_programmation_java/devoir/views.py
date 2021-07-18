@@ -54,10 +54,10 @@ def Verifier_Fichier_Solution(fichier):
         lire=z.ZipFile(fichier,mode='r')
         list_name=lire.namelist()
         e='main.java'
-        w=None
+        w=False
         for h in list_name:
             if re.search(e,h):
-                w=h
+                w=True
         return w
     except ValueError:
         print(ValueError)
@@ -92,18 +92,24 @@ def Soumission_Etud(request,id_dev,id_etud):
             sweetify.sweetalert(request,'Erreur', button='ok',text="Vous n'avez pas uploade le fichier !!",timer=10000,icon='warning')
             return redirect('dashboard')
         if os.path.splitext(fichier.name)[1] != ".xlsx" and z.is_zipfile(fichier) and os.path.splitext(fichier.name)[1] != ".docx" :
-            if Verifier_Fichier_Solution(fichier) !=None:
-                w=Verifier_Fichier_Solution(fichier)
-                lire=z.ZipFile(fichier,mode='r')
-                with lire.open(w) as myfile:
-                    source=myfile.read()
-                    main=open(path+"\solutions\main.java",'wb')
-                    main.write(source)
-                    main.close()
-                    #os.chdir == cd 
-                    os.chdir(path+"\solutions")
+            #########   mna ############
+            if Verifier_Fichier_Solution(fichier):
+                with z.ZipFile(fichier) as lire:
+                    for qr in lire.namelist():
+                        with lire.open(qr) as myfile:
+                            #os.chdir == cd 
+                            os.chdir(path+"\solutions")
+                            try:
+                                fr=str(qr).split('/')[1]
+                            except:
+                                fr=str(qr)
+                            if fr !="":
+                                prog=open(fr,"wb")
+                                prog.write(myfile.read())
+                                prog.close()
                     os.system("javac main.java 2> erreur.txt")
                     size=os.path.getsize("erreur.txt")
+                    #########   mna ############
                     if size > 0:
                         erreur=open("erreur.txt").read().split('\n|,|;|^')
                         sweetify.sweetalert(request,'Erreur', button='ok',text=erreur,timer=200000,icon='error')
@@ -132,9 +138,16 @@ def Soumission_Etud(request,id_dev,id_etud):
                                 if os.path.exists("sortie.txt"):
                                     os.remove("sortie.txt")#pour supprimer sortie.txt
                                 q=False
-                                os.system("java main.java< in.txt >> sortie.txt")
+                                os.system("java main < in.txt >> sortie.txt")
                                 q=TestTrue("sortie.txt","out.txt",path+"\solutions\\")
-                                print("q=",q)
+                                for qr in lire.namelist():
+                                    try:
+                                        fr=str(qr).split('/')[1]
+                                    except:
+                                        fr=str(qr)
+                                    if os.path.exists(str(fr)):
+                                        os.remove(str(fr))
+                                        os.remove(str(fr).split('.')[0]+".class")
                                 if q:
                                     Note=5
                                     os.chdir(chemin)
@@ -406,7 +419,12 @@ def ModifierInfo(request):
 def ModifierAvatar(request):   
     user = request.user
     if request.method == 'POST':
-        img=request.FILES['avatar']
+        img=None
+        try:
+            img=request.FILES['avatar']
+        except:
+            sweetify.sweetalert(request,'Erreur', button='ok',text="Vous n'avez pas uploade l'image !!",timer=10000,icon='warning')
+            return redirect('Profil')
         if user.type_cmp == 'Etudiant':
            e=Etudiant.objects.get(user=user)
            e.avatar=img
