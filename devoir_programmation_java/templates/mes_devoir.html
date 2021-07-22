@@ -41,32 +41,53 @@
                 <th class="fw-bold text-warning"></th>
             
         </thead>
+        
         <tbody>
-            <!-- Item -->
+            
             {%for d in devoirs%}
             <tr>
-                <td ><span class="fw-bold"></span></td>
+                <td ><span class="fw-bold">{{d.titre}}</span></td>
                 <td>
                     <span class="fw-normal">
-                        
-                            <!-- Avatar -->
                           
                     </span>
                 </td>
                 <td>
-                  <span class="fw-normal">{{d.titre}}</span>
+                  <span class="fw-normal">{{d.module.nom}}</span>
               </td>
-                <td><span class="fw-normal">{{d.module.nom}}</span></td>                        
-                <td><span class="fw-normal">{{d.date_fin}}</span></td>
+                <td><span class="fw-normal">{{d.date_fin}}</span></td>                        
+                <td><span class="fw-normal">{{d.type_dev}}</span></td>
                 <td>  
-                   
-                  <span class="fw-bold">{{d.type_dev}}</span>
+                   <!--dddddddddddddd-->
+            <div class="modal" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true" id="modal-default{{d.id}}_supp">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header bg-gradient-secondary">
+                      <h5 class="modal-title">Confirmer la suppression</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p style="color: black;">Voulez-vous vraiment supprimer le devoir ?</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">annuler</button>
+                      <form method="post" action="{%url 'SupprimerDevoir' d.id%}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                      <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            <!-- Item -->
+                  <span class="fw-bold"><button class="btn btn-secondary text-dark me-2 dropdown-toggle">Modifier</button></span>
                   
               </td>
                 <td>
-                    <a href="">
                     <span class="fw-bold">
-                    </a></span></td>       
+                        <button class="btn btn-secondary text-dark me-2 dropdown-toggle" data-bs-toggle="modal" data-bs-target="#modal-default{{d.id}}_supp">Supprimer</button>
+                    </span></td>       
                 
             </tr>
             {%endfor%}

@@ -16,6 +16,7 @@ from PyPDF2 import PdfFileWriter
 import time
 import filecmp 
 import warnings
+import time
 # Create your views here.
 path=os.path.abspath(".")+"\media"
 chemin=os.path.abspath(".")
@@ -138,7 +139,10 @@ def Soumission_Etud(request,id_dev,id_etud):
                                 if os.path.exists("sortie.txt"):
                                     os.remove("sortie.txt")#pour supprimer sortie.txt
                                 q=False
+                                start_time=time.time()
                                 os.system("java main < in.txt >> sortie.txt")
+                                interval=time.time()-start_time
+                                print(interval)
                                 q=TestTrue("sortie.txt","out.txt",path+"\solutions\\")
                                 for qr in lire.namelist():
                                     try:
@@ -513,3 +517,27 @@ def AfficheDevoir(request,id_dev):
     except ValueError:
         print(ValueError)
         return render(request,'page-404.html')
+@login_required()
+def SupprimerDevoir(request,id_dev):
+    user = request.user
+    if user.type_cmp == 'Enseignant':
+        e=Enseignants.objects.get(user=user)
+        devoirs=Devoirs.objects.filter(id_ens=e)
+        try:
+            d=Devoirs.objects.get(id=id_dev)
+            titre=d.titre
+            fichier=d.fichier
+            if d in devoirs:
+                d.delete()
+                os.chdir(path+"\devoir")
+                f=str(fichier)
+                if os.path.exists(f.split('/')[1]):
+                    os.remove(path+"/"+str(fichier))
+                sweetify.sweetalert(request,'Suppression de devoir', button='ok',text="Suppression avec succès de devoir "+titre,timer=30000,icon='success',)
+                return redirect('MesDevoir')
+            else:
+                sweetify.sweetalert(request,'Erreur', button='ok',text="ce devoir n'existe pas !!! ",timer=30000,icon='warning')
+                return redirect('MesDevoir')
+        except:
+            return render(request,'page-500.html')
+    return redirect('MesDevoir')
