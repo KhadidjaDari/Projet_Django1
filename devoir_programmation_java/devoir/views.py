@@ -549,7 +549,6 @@ def SupprimerDevoir(request,id_dev):
 def ModifierDevoir(request,id_dev):
     user=request.user
     if user.type_cmp == 'Enseignant' and request.method == 'POST':
-        print('hhhh')
         titre=None
         type_dev=None
         fichier=None
@@ -576,7 +575,6 @@ def ModifierDevoir(request,id_dev):
                 sweetify.sweetalert(request,'Modification de devoir', button='ok',text="Tu n'as rien changé !! ",timer=30000,icon='warning',)
                 return redirect('MesDevoir')  
             if d in devoirs:
-                print("hhhh")
                 if titre != None:
                     d.titre=titre
                 if type_dev !=  None:
@@ -611,18 +609,15 @@ def ModifierDevoir(request,id_dev):
 
 @login_required()
 def QuiFaitDevoir(request,id_dev):
-    print('hhhh')
     user=request.user
-    print(id_dev)
-    if user.type_cmp == 'Enseignant':
-        etuds=None
+    if user.type_cmp =='Enseignant':
         try:
             e=Enseignants.objects.get(user=user)
-            devoirs=Devoirs.objects.get(id_ens=e)
+            devoirs=Devoirs.objects.filter(id_ens=e)
             d=Devoirs.objects.get(id=id_dev)
             if d in devoirs:
                 soum=Soumission.objects.filter(id_dev=d)
-                print(soum)
+                return render(request,"QuiFaitDevoir.html",{'soum':soum,"e":e})         
         except:
            return render(request,'page-500.html') 
     return redirect('MesDevoir')
