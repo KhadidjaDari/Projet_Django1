@@ -47,16 +47,19 @@
             {%for d in devoirs%}
             <tr>
                 <td ><span class="fw-bold">{{d.titre}}</span></td>
-                <td>
-                    <span class="fw-normal">
-                          
-                    </span>
-                </td>
+                
                 <td>
                   <span class="fw-normal">{{d.module.nom}}</span>
               </td>
                 <td><span class="fw-normal">{{d.date_fin}}</span></td>                        
                 <td><span class="fw-normal">{{d.type_dev}}</span></td>
+                <td>
+                    <span class="fw-normal">
+                      <a href="{%url 'QuiFaitDevoir' d.id %}">
+                      <button type="button" class="btn btn-secondary">Qui ont fait le devoir</button>  
+                    </a>
+                    </span>
+                </td>
                 <td>  
                    <!--dddddddddddddd-->
             <div class="modal" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true" id="modal-default{{d.id}}_supp">
@@ -81,7 +84,106 @@
               </div>
 
             <!-- Item -->
-                  <span class="fw-bold"><button class="btn btn-secondary text-dark me-2 dropdown-toggle">Modifier</button></span>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal_{{d.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-gradient-secondary">
+          <h5 class="modal-title" id="exampleModalLabel">Modifier Les Informations de Devoir: {{d.titre}}</h5>
+          <!--<div class="form-group">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">About sur le fichier uploade</button>
+            </div>-->
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body form-group">
+            <div class="form-group">
+              {% load sweetify %}
+              {% sweetify %}
+              <form method="post" action="{%url 'ModifierDevoir' d.id %}" enctype="multipart/form-data">
+                            
+                {% csrf_token %}
+                <div class="form-group mb-4">
+            <label for="disabledTextInput" style="color: black;">Titre de devoir</label>
+              <input type="text" class="form-control" name="titre">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="TextInput" style="color: black;">Fichier de devoir</label>
+            <input type="file"  class="form-control" name="fichier" id="fichier" onchange="return Validation()" placeholder="{{d.fichier}}"> 
+            <script> 
+              function Validation() 
+              { 
+              var fichier = document.getElementById('fichier'); 
+              var valeur = fichier.value; 
+              var extensions = /(\.zip)$/i; 
+                if (!extensions.exec(valeur))
+                { 
+                  Swal.fire({
+                                position: 'center',
+                                icon: 'warning',
+                                title:'Erreur',
+                                text: "Le fichier que vous avez téléchargé ne correspond pas au format .zip",
+                                showConfirmButton: true,
+                                timer: 10000,
+                                confirmButtonText: 'Fermer',
+
+                            })
+                  
+                }
+                if(event.target.files[0].size>1024*1024){
+                  Swal.fire({
+                                position: 'center',
+                                icon:'error',
+                                title:'Erreur',
+                                text: "La taille du fichier est trop grande, la taille du fichier ne doit pas dépasser 1 Mo",
+                                showConfirmButton: true,
+                                timer: 10000,
+                                confirmButtonText: 'Fermer',
+
+                            })
+                            event.preventDefault()
+                }
+              }
+                </script>
+          </div>
+            <div class="form-group">
+                <label for="exampleFormControlSelect1" style="color: black;">Type de devoir :</label>
+                <select class="form-control"  name="type_dev" placeholder="{{d.type_dev}}">
+                  <option></option>
+                  <option>sommative</option>
+                  <option>formative</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="TextInput" style="color: black;">Date de soumission</label>
+                <input type="date"  class="form-control" name="date_fin">
+              </div>
+              <div class="form-group">
+                <label for="exampleFormControlSelect1" style="color: black;">Catégorie</label>
+                <select class="form-control" name="module">
+                  <option></option>
+                  {% for i in c%}
+                  <option>{{i.nom}}</option>
+                  {%endfor%}
+                </select>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <button type="submit" class="btn btn-primary">Sauvegarder</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+            <!--fin modal-->
+
+
+                  <span class="fw-bold"><button class="btn btn-secondary text-dark me-2 dropdown-toggle" data-bs-toggle="modal" data-bs-target="#exampleModal_{{d.id}}">Modifier</button></span>
                   
               </td>
                 <td>

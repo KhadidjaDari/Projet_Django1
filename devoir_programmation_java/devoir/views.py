@@ -67,11 +67,12 @@ def Verifier_Fichier_Solution(fichier):
 @login_required()
 def MesDevoir(request):
     user = request.user
+    c=Categorie.objects.all()
     e=None
     if user.type_cmp == 'Enseignant':
         e=Enseignants.objects.get(user=user)
-        devoirs=Devoirs.objects.filter(id_ens=e.pk).values()
-    return render(request,'mes_devoir.html',{'e':e,'devoirs':devoirs})
+        devoirs=Devoirs.objects.filter(id_ens=e.pk)
+    return render(request,'mes_devoir.html',{'e':e,'devoirs':devoirs,'c':c})
 @login_required()
 def listEtudiant(request):
     user = request.user
@@ -521,9 +522,9 @@ def AfficheDevoir(request,id_dev):
 def SupprimerDevoir(request,id_dev):
     user = request.user
     if user.type_cmp == 'Enseignant':
-        e=Enseignants.objects.get(user=user)
-        devoirs=Devoirs.objects.filter(id_ens=e)
         try:
+            e=Enseignants.objects.get(user=user)
+            devoirs=Devoirs.objects.filter(id_ens=e)
             d=Devoirs.objects.get(id=id_dev)
             titre=d.titre
             fichier=d.fichier
@@ -540,4 +541,88 @@ def SupprimerDevoir(request,id_dev):
                 return redirect('MesDevoir')
         except:
             return render(request,'page-500.html')
+    else:
+        return render(request,'page-404.html')
+
+
+@login_required()
+def ModifierDevoir(request,id_dev):
+    user=request.user
+    if user.type_cmp == 'Enseignant' and request.method == 'POST':
+        print('hhhh')
+        titre=None
+        type_dev=None
+        fichier=None
+        date_fin=None
+        module=None
+        try:
+            e=Enseignants.objects.get(user=user)
+            devoirs=Devoirs.objects.filter(id_ens=e)
+            d=Devoirs.objects.get(id=id_dev)
+            fil=d.fichier
+            if request.POST['titre']:
+                titre=request.POST['titre']
+            if request.POST['type_dev']:
+                type_dev=request.POST['type_dev']
+            try:
+                fichier=request.FILES['fichier']
+            except:
+                fichier=None
+            if request.POST['date_fin']:
+                date_fin=request.POST['date_fin']
+            if request.POST['module']:
+                module=request.POST['module']
+            if titre == None and type_dev == None and fichier == None and date_fin == None and module == None:
+                sweetify.sweetalert(request,'Modification de devoir', button='ok',text="Tu n'as rien changé !! ",timer=30000,icon='warning',)
+                return redirect('MesDevoir')  
+            if d in devoirs:
+                print("hhhh")
+                if titre != None:
+                    d.titre=titre
+                if type_dev !=  None:
+                    d.type_dev=type_dev
+                if fichier != None:
+                    if os.path.splitext(fichier.name)[1] == ".xlsx" or not z.is_zipfile(fichier) or os.path.splitext(fichier.name)[1] == ".docx" :
+                        sweetify.sweetalert(request,'Erreur', button='Fermer',text="Le fichier que vous avez téléchargé ne correspond pas au format .zip",timer=10000,icon='warning',footer='format de  fichier à uploader est .zip')
+                        return redirect('MesDevoir')
+                    os.chdir(path+"\devoir")
+                    f=str(fil)
+                    if os.path.exists(f.split('/')[1]):
+                        os.remove(path+"/"+str(fil))
+                    d.fichier=fichier
+                    d.save()
+                    old_file = os.path.join(path+"\devoir",fichier.name)
+                    new_file = os.path.join(path+"\devoir",str(fil).split('/')[1])
+                    os.rename(old_file,new_file)
+                    d.fichier="devoir/"+str(fil).split('/')[1]
+                if date_fin != None:
+                    d.date_fin=date_fin
+                if module != None:
+                    C=Categorie.objects.get(nom=module)
+                    d.module=C
+                d.save()
+                sweetify.sweetalert(request,'Modification de devoir', button='ok',text="Modification avec succès de devoir ",timer=30000,icon='success',)
+                return redirect('MesDevoir')
+        except:
+            return render(request,'page-500.html')
+        return redirect('MesDevoir')
+    else:
+        return render(request,'page-404.html')
+
+@login_required()
+def QuiFaitDevoir(request,id_dev):
+    print('hhhh')
+    user=request.user
+    print(id_dev)
+    if user.type_cmp == 'Enseignant':
+        etuds=None
+        try:
+            e=Enseignants.objects.get(user=user)
+            devoirs=Devoirs.objects.get(id_ens=e)
+            d=Devoirs.objects.get(id=id_dev)
+            if d in devoirs:
+                soum=Soumission.objects.filter(id_dev=d)
+                print(soum)
+        except:
+           return render(request,'page-500.html') 
     return redirect('MesDevoir')

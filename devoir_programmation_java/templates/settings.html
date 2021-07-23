@@ -15,7 +15,7 @@
           <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog">
             <div class="modal-dialog">
               <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-gradient-secondary">
                     <h5 class="modal-title" id="exampleModalLabel">Modifier les  informations personnel</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -29,12 +29,12 @@
                           <div class="col-md-6 mb-3">
                           
                                   <label for="first_name">Prénom</label>
-                                  <input class="form-control" name="prenom" type="text" placeholder={{e.prenom}} >
+                                  <input class="form-control" name="prenom" type="text" placeholder="{{e.prenom}}" >
                               </div>
                           <div class="col-md-6 mb-3">
                               
                                   <label for="last_name">Nom</label>
-                                  <input class="form-control" name="nom" type="text" placeholder={{e.nom}} >
+                                  <input class="form-control" name="nom" type="text" placeholder="{{e.nom}}" >
                               </div>
                           </div>
                       </div>
@@ -43,7 +43,7 @@
                               <label for="birthday">Date d'anniversaire</label>
                               <div class="input-group">
                                   <span class="input-group-text"><span class="far fa-calendar-alt"></span></span>
-                                  <input type="date" class="form-control" name="date_naiss" type="text" placeholder={{e.date_naiss}} >                                               
+                                  <input type="date" class="form-control" name="date_naiss" type="text" placeholder="{{e.date_naiss}}" >                                               
                                 </div>
                           </div>
                           {%if user.type_cmp == 'Etudiant'%}

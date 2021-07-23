@@ -26,6 +26,8 @@ urlpatterns = [
     path('listEtudiant',views.listEtudiant,name='listEtudiant'),
     path('MesDevoir',views.MesDevoir,name='MesDevoir'),
     path('SupprimerDevoir/<int:id_dev>',views.SupprimerDevoir,name='SupprimerDevoir'),
+    path('ModifierDevoir/<int:id_dev>',views.ModifierDevoir,name='ModifierDevoir'),
+    path('QuiFaitDevoir/<int:id_dev>',views.QuiFaitDevoir,name='QuiFaitDevoir'),
     #path('dashboard/', views.dashboard, name='dashboard'),
     # Matches any html file
     #re_path(r'^.*\.*', views.pages, name='pages'),
