@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'sweetify',
     'django_media_fixtures',
+    'notifications',
 
 ]
 

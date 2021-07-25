@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %}
-
+{% load notifications_tags %} 
 {% block title %} List etudiants qui fait le devoir {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
@@ -14,7 +14,10 @@
     <div class="d-block mb-4 mb-md-0">
         <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
             <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">                    
-              <li class="fw-bold text-warning" aria-current="page">Liste des etudiants qui fait le devoir</li>
+              <li class="fw-bold text-warning" aria-current="page">Liste des etudiants qui fait le devoir 
+                {% notifications_unread %}
+            </li>
+            
             </ol>
         </nav>
     </div>
@@ -31,14 +34,14 @@
     <table class="table table-dark table-striped">
         <thead >
             
-                
-                <th class="fw-bold text-warning"></th>	
-                <th class="fw-bold text-warning"></th>					
+            <th class="fw-bold text-warning"></th>	
+                <th class="fw-bold text-warning"></th>						
                 <th class="fw-bold text-warning">Nom</th>
                 <th class="fw-bold text-warning">Prénom</th>
                 <th class="fw-bold text-warning">Promo</th>
                 <th class="fw-bold text-warning">Date Naissance </th>
                 <th class="fw-bold text-warning">La note</th>
+                <th class="fw-bold text-warning">solution d'etudiant</th>
             
         </thead>
         <tbody>
@@ -67,7 +70,13 @@
                 <td>
                     <span class="fw-bold">
                         {{s.note}}
-                    </span></td>       
+                    </span>
+                </td>   
+                    <td ><span class="fw-bold">
+                        <a href="{{s.solution.url}}">
+                        <button class="btn btn-secondary text-dark me-2 dropdown-toggle">Voir la solution</button>
+                    </a>
+                    </span></td>    
                 
             </tr>
             {%endfor%}
@@ -85,6 +94,7 @@
             <th class="fw-bold text-warning"></th>
             <th class="fw-bold text-warning"></th>
             <th class="fw-bold text-warning"></th>
+            <th class="fw-bold text-warning"></th>	
         
     </thead>
     </table></div>

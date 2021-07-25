@@ -17,6 +17,8 @@ import time
 import filecmp 
 import warnings
 import time
+from django.db.models.signals import post_save
+from notifications.signals import notify
 # Create your views here.
 path=os.path.abspath(".")+"\media"
 chemin=os.path.abspath(".")
@@ -72,6 +74,8 @@ def MesDevoir(request):
     if user.type_cmp == 'Enseignant':
         e=Enseignants.objects.get(user=user)
         devoirs=Devoirs.objects.filter(id_ens=e.pk)
+        etudiant=Etudiant.objects.get(id=1)
+        #notify.send(etudiant,recipient=user,verb="test notification")
     return render(request,'mes_devoir.html',{'e':e,'devoirs':devoirs,'c':c})
 @login_required()
 def listEtudiant(request):

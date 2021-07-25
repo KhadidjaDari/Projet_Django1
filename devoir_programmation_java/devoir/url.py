@@ -3,11 +3,12 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
-from django.urls import path, re_path
+from django.urls import path, re_path,include
 from . import views
 from comptes import views as v
 from django.conf import settings
 from django.conf.urls.static import static
+import notifications.urls
 urlpatterns = [
 
     # The home page
@@ -28,6 +29,8 @@ urlpatterns = [
     path('SupprimerDevoir/<int:id_dev>',views.SupprimerDevoir,name='SupprimerDevoir'),
     path('ModifierDevoir/<int:id_dev>',views.ModifierDevoir,name='ModifierDevoir'),
     path('QuiFaitDevoir/<int:id_dev>',views.QuiFaitDevoir,name='QuiFaitDevoir'),
+    path('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
+
     #path('dashboard/', views.dashboard, name='dashboard'),
     # Matches any html file
     #re_path(r'^.*\.*', views.pages, name='pages'),
