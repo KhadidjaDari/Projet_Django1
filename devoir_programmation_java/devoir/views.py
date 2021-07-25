@@ -75,19 +75,18 @@ def MesDevoir(request):
     if user.type_cmp == 'Enseignant':
         e=Enseignants.objects.get(user=user)
         devoirs=Devoirs.objects.filter(id_ens=e.pk)
-        etudiant=Etudiant.objects.get(id=1)
-        #notify.send(etudiant,recipient=user,verb="test notification")
         notification=Notification.objects.filter(recipient=user)
-        print(notification)
     return render(request,'mes_devoir.html',{'e':e,'devoirs':devoirs,'c':c,'notf':notification})
 @login_required()
 def listEtudiant(request):
     user = request.user
     e=None
     etuds=Etudiant.objects.all()
+    notification=Notification.objects.filter(recipient=user)
     if user.type_cmp == 'Enseignant':
         e=Enseignants.objects.get(user=user)
-    return render(request,'list_etudiants.html',{'e':e,'etuds':etuds})
+        notification=Notification.objects.filter(recipient=user)
+    return render(request,'list_etudiants.html',{'e':e,'etuds':etuds,'notf':notification})
 
 @login_required()
 def Soumission_Etud(request,id_dev,id_etud):
@@ -126,6 +125,16 @@ def Soumission_Etud(request,id_dev,id_etud):
                     if size == 0:
                         try:
                             devoir=Devoirs.objects.get(id=id_dev)
+                            """ pour notification"""
+                            titre_devoir=devoir.titre
+                            print(type(titre_devoir))
+                            ens=devoir.id_ens
+                            print(ens)
+                            user_ens=ens.user
+                            print(user_ens.type_cmp)
+                            etud_cu=Etudiant.objects.get(user=user)
+                            print(type(etud_cu.nom))
+                            """ pour notification"""
                             nom_fichier=devoir.fichier
                             zip_devoir=z.ZipFile(nom_fichier,mode='r',)
                             list_name=zip_devoir.namelist()
@@ -175,6 +184,8 @@ def Soumission_Etud(request,id_dev,id_etud):
                                         os.rename(old_file, new_file)
                                         som.solution='solutions/'+fichier.name.split('.')[0]+'_'+i+'.zip'
                                         som.save()
+                                        verb_desc="L'étudiant "+user.username+"a remis le devoir "+titre_devoir
+                                        notify.send(etud_cu,recipient=user_ens,verb=verb_desc)
                                         sweetify.sweetalert(request,'Evaluation',text="la note de votre soumission est "+str(Note)+"/5",timer=10000,icon='success',)
                                         return redirect('dashboard')
                                     else:
@@ -193,6 +204,8 @@ def Soumission_Etud(request,id_dev,id_etud):
                                         os.rename(old_file,new_file)
                                         som.solution='solutions/'+fichier.name.split('.')[0]+'_'+i+'.zip'
                                         som.save()
+                                        verb_desc="L'étudiant "+user.username+"a remis le devoir "+titre_devoir
+                                        notify.send(etud_cu,recipient=user_ens,verb=verb_desc)
                                         sweetify.sweetalert(request,'Evaluation', button='ok',text="la note de votre soumission est "+str(Note)+"/5",timer=10000,icon='success',)
                                         return redirect('dashboard')
                                 else:
@@ -255,7 +268,8 @@ def dashboard(request):
                 return render(request,'dashboard.html',{'e':e})
     if user.type_cmp == 'Enseignant':
         e=Enseignants.objects.get(user=user) 
-    return render(request,'dashboard.html',{'c':c,'e':e})
+        notification=Notification.objects.filter(recipient=user)
+    return render(request,'dashboard.html',{'c':c,'e':e,'notf':notification})
 
 
 
@@ -298,7 +312,8 @@ def AjouterDevoir(request):
     user = request.user
     if user.is_authenticated:
         c=Categorie.objects.all() 
-        if request.method == 'POST':
+        notification=Notification.objects.filter(recipient=user)
+        if request.method == 'POST' and user.type_cmp == 'Enseignant':
             titre=request.POST['titre']
             fichier=None
             try:
@@ -332,11 +347,14 @@ def AjouterDevoir(request):
                     devoir.fichier='devoir/'+titre+'_'+i+'.zip'
                     devoir.save()
                     sweetify.sweetalert(request,'Ajouter Devoir', button='ok',text="Ajouté avec succès",timer=10000,icon='success',)
-                    return render(request,'dashboard.html',{'c':c})
+                    return render(request,'dashboard.html',{'c':c,'e':e,'notf':notification})
+                else:
+                    sweetify.sweetalert(request,'Erreur', button='Fermer',text="Votre fichier ne respecte pas les conditions, le fichier doit contenir pdf, in.txt et out.txt",timer=30000,icon='warning')
+                    return redirect('dashboard')
             else:
-                sweetify.sweetalert(request,'Erreur', button='Fermer',text="Le fichier que vous avez téléchargé ne correspond pas au format .zip",timer=10000,icon='warning',footer='format de  fichier à uploader est .zip')
+                sweetify.sweetalert(request,'Erreur', button='Fermer',text="Le fichier que vous avez téléchargé ne correspond pas au format .zip",timer=30000,icon='warning',footer='format de  fichier à uploader est .zip')
                 return redirect('dashboard')
-        return render(request,'dashboard.html',{'c':c})
+        return render(request,'dashboard.html',{'c':c,'e':e,'notf':notification})
 
 
 
@@ -456,11 +474,12 @@ def ModifierAvatar(request):
 def Profil(request):
     user = request.user
     e=None
+    notification=Notification.objects.filter(recipient=user)
     if user.type_cmp == 'Enseignant':
         e=Enseignants.objects.get(user=user)
     if user.type_cmp == 'Etudiant':
         e=Etudiant.objects.get(user=user)
-    return render(request,'settings.html',{'e':e})
+    return render(request,'settings.html',{'e':e,'notf':notification})
 
 
 
@@ -622,9 +641,10 @@ def QuiFaitDevoir(request,id_dev):
             e=Enseignants.objects.get(user=user)
             devoirs=Devoirs.objects.filter(id_ens=e)
             d=Devoirs.objects.get(id=id_dev)
+            notification=Notification.objects.filter(recipient=user)
             if d in devoirs:
                 soum=Soumission.objects.filter(id_dev=d)
-                return render(request,"QuiFaitDevoir.html",{'soum':soum,"e":e})         
+                return render(request,"QuiFaitDevoir.html",{'soum':soum,"e":e,'notf':notification})         
         except:
            return render(request,'page-500.html') 
     return redirect('MesDevoir')
