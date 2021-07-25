@@ -19,6 +19,7 @@ import warnings
 import time
 from django.db.models.signals import post_save
 from notifications.signals import notify
+from notifications.models import Notification
 # Create your views here.
 path=os.path.abspath(".")+"\media"
 chemin=os.path.abspath(".")
@@ -76,7 +77,9 @@ def MesDevoir(request):
         devoirs=Devoirs.objects.filter(id_ens=e.pk)
         etudiant=Etudiant.objects.get(id=1)
         #notify.send(etudiant,recipient=user,verb="test notification")
-    return render(request,'mes_devoir.html',{'e':e,'devoirs':devoirs,'c':c})
+        notification=Notification.objects.filter(recipient=user)
+        print(notification)
+    return render(request,'mes_devoir.html',{'e':e,'devoirs':devoirs,'c':c,'notf':notification})
 @login_required()
 def listEtudiant(request):
     user = request.user

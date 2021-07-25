@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load notifications_tags %} 
+
 {% block title %} List etudiants qui fait le devoir {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
@@ -14,10 +15,7 @@
     <div class="d-block mb-4 mb-md-0">
         <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
             <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">                    
-              <li class="fw-bold text-warning" aria-current="page">Liste des etudiants qui fait le devoir 
-                {% notifications_unread %}
-            </li>
-            
+              <li class="fw-bold text-warning" aria-current="page">Liste des etudiants qui fait le devoir {% notifications_unread %}</li>
             </ol>
         </nav>
     </div>
