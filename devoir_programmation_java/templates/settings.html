@@ -229,25 +229,22 @@
                               <!-- Avatar -->
                               <form method="post" action="{%url 'ModifierAvatar'%}" enctype="multipart/form-data">
                                 {% csrf_token %}
-                              <div class="user-avatar xl-avatar">
-                                  <input type="file" name="avatar" class="form-control" >
-                              </div>
-                              <button class="btn btn-secondary text-dark me-2 dropdown-toggle" type="submit"><span class="fas fa-plus me-2"></span>ajouter image</button>
-                            </form>
-                            </div>
-                          <div class="file-field">
+                          <div class="file-field" >
                               <div class="d-flex justify-content-xl-center ms-xl-3">
                                   <div class="d-flex">
-                                    <span class="icon icon-md"><span class="fas fa-paperclip me-3"></span></span> <input type="file">
+                                    <span class="icon icon-md"><span class="fas fa-paperclip me-3"></span></span> <input type="file" name="avatar">
                                     <div class="d-md-block text-left">
                                         <div class="fw-normal text-dark mb-1">Choisissez une image</div>
                                         <div class="text-gray small">JPG, PNG</div>
                                     </div>
+                                    
                                   </div>
                               </div>
                             </div>                                        
                       </div>
                   </div>
+                  <button class="btn btn-secondary text-dark me-2 dropdown-toggle" type="submit"><span class="fas fa-plus me-2"></span>ajouter image</button>
+                            </form>
               </div>
               
           </div>

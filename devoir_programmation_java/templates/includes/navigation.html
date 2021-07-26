@@ -11,13 +11,19 @@
                 </div>
               </form>
             </div>
+            <script>
+               function fct() {
+                    
+                document.getElementById('notif').innerHTML = 0;
+            }
+            </script>
             <!-- Navbar links -->
             <ul class="navbar-nav align-items-center">
               <li class="nav-item dropdown">
                 <a class="nav-link text-dark me-lg-3 icon-notifications dropdown-toggle" data-unread-notifications="true" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span class="icon icon-sm">
-                    <span class="fas fa-bell bell-shake" onclick=""></span>
-                    <span class="icon-badge rounded-circle unread-notifications"></span><p style="color: #f83650;"><b>{% notifications_unread %}</b></p></span>
+                    <span class="fas fa-bell bell-shake" id='nf' onclick="fct()"></span>
+                    <span class="icon-badge rounded-circle unread-notifications"></span><p style="color: #f83650;" id="notif"><b>{% notifications_unread %}</b></p></span>
 
                   </span>
                 </a>
@@ -54,17 +60,17 @@
                     <img class="user-avatar md-avatar rounded-circle" alt="Image placeholder" src={{e.avatar.url}}>
                     <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
                       <span class="mb-0 font-small fw-bold">
-                         <strong>{{user.username}}</strong>
+                         <strong><b>{{user.username}}</b></strong>
                       </span>
                     </div>
                   </div>
                 </a>
                 <div class="dropdown-menu dashboard-dropdown dropdown-menu-end mt-2 py-0">
-                    <a class="dropdown-item rounded-top fw-bold" href="">
+                    <a class="dropdown-item rounded-top fw-bold" href="{% url 'Profil'%}">
                       <span class="far fa-user-circle"></span>Mon profil</a>
-                    <a class="dropdown-item fw-bold" href=""><span class="fas fa-cog"></span>Paramètres</a>
+<!--<a class="dropdown-item fw-bold" href=""><span class="fas fa-cog"></span>Paramètres</a>-->
                     <div role="separator" class="dropdown-divider my-0"></div>
-                    <a class="dropdown-item rounded-bottom fw-bold" href="">
+                    <a class="dropdown-item rounded-bottom fw-bold" href="{% url 'logout'%}">
                       <span class="fas fa-sign-out-alt text-danger"></span>Se déconnecter</a>
                 </div>
               </li>
