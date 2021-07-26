@@ -20,6 +20,7 @@ import time
 from django.db.models.signals import post_save
 from notifications.signals import notify
 from notifications.models import Notification
+import subprocess
 # Create your views here.
 path=os.path.abspath(".")+"\media"
 chemin=os.path.abspath(".")
@@ -115,7 +116,12 @@ def Soumission_Etud(request,id_dev,id_etud):
                                 prog=open(fr,"wb")
                                 prog.write(myfile.read())
                                 prog.close()
-                    os.system("javac main.java 2> erreur.txt")
+                    err_file=open("Erreur_sortie.txt","w")
+                    sortie=open("sortie.txt","w")
+                    p1=subprocess.Popen(["javac","main.java"],
+                                        stdout=subprocess.PIPE,stderr=err_file)
+                    time.sleep(5)
+                    #os.system("javac main.java 2> erreur.txt")
                     size=os.path.getsize("erreur.txt")
                     #########   mna ############
                     if size > 0:
@@ -153,13 +159,20 @@ def Soumission_Etud(request,id_dev,id_etud):
                             with zip_devoir.open(out_txt) as o:
                                 out_put.write(o.read())
                                 out_put.close()
-                                if os.path.exists("sortie.txt"):
-                                    os.remove("sortie.txt")#pour supprimer sortie.txt
+                                """if os.path.exists("sortie.txt"):
+                                    os.remove("sortie.txt")"""#pour supprimer sortie.txt
                                 q=False
-                                start_time=time.time()
-                                os.system("java main < in.txt >> sortie.txt")
-                                interval=time.time()-start_time
-                                print(interval)
+                                print(p1.poll())
+                                ent=open("in.txt","r")
+                                p1=subprocess.Popen(["java","main",],stdin=ent,
+                                                            stdout=sortie,stderr=err_file)
+                                time.sleep(10)
+                                print(p1.poll())
+                                if p1.poll() == None:
+                                    p1.terminate()
+                                    sweetify.sweetalert(request,'Erreur', button='ok',text="Votre code prend trop de temps, vérifiez le code s'il y a une boucle infinie !!! ",timer=200000,icon='warning')
+                                    return redirect('dashboard')                                    
+                                #os.system("java main < in.txt >> sortie.txt")
                                 q=TestTrue("sortie.txt","out.txt",path+"\solutions\\")
                                 for qr in lire.namelist():
                                     try:
